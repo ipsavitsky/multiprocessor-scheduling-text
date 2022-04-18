@@ -1,0 +1,32 @@
+\begin{tikzpicture}
+	\begin{pgfonlayer}{nodelayer}
+		\node [style=decision] (0) at (0, 6) {Путь критический?};
+		\node [style=process] (1) at (0, 0) {Удалить $d_i$ из $G$};
+		\node [style=process] (2) at (-5, 3) {\makecell{Ограниченный перебор с \\минимизацией $\sum s_k$}};
+		\node [style=none] (3) at (-5, 6) {};
+		\node [style=none] (4) at (-5, 0) {};
+		\node [style=process] (5) at (8, 2) {Обновить $D$};
+		\node [style=decision] (6) at (8, -1) {Множество $D$ пусто?};
+		\node [style=startstop] (7) at (15.5, -1) {Останов};
+		\node [style=none] (8) at (2.5, 0) {};
+		\node [style=none] (9) at (2.5, 4) {};
+		\node [style=none] (10) at (8, 4) {};
+		\node [style=none] (11) at (8, -4) {};
+		\node [style=none] (12) at (0, 9) {};
+	\end{pgfonlayer}
+	\begin{pgfonlayer}{edgelayer}
+		\draw (0) to (3.center);
+		\draw (4.center) to (2);
+		\draw [style=arrow] (3.center) to node [left] {Нет} (2);
+		\draw [style=arrow] (4.center) to (1);
+		\draw [style=arrow] (0) to node [right] {Да} (1);
+		\draw (1) to (8.center);
+		\draw (8.center) to (9.center);
+		\draw (9.center) to (10.center);
+		\draw [style=arrow] (10.center) to (5);
+		\draw [style=arrow] (5) to (6);
+		\draw [style=arrow] (6) to node [above] {Да} (7);
+		\draw [style=arrow] (6) to node [left] {\makecell{\hfill Нет\\Обратно на выбор задачи}} (11.center);
+		\draw [style=arrow] (12.center) to node [right] {Ввод} (0);
+	\end{pgfonlayer}
+\end{tikzpicture}

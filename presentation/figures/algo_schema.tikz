@@ -1,0 +1,31 @@
+\begin{tikzpicture}
+	\begin{pgfonlayer}{nodelayer}
+		\node [style=startstop] (1) at (0, 7.75) {Данные};
+		\node [style=process] (3) at (0, 5) {Предподсчет};
+		\node [style=process] (5) at (0, -1) {\makecell{Размещение жадной\\стратегией}};
+		\node [style=decision] (6) at (9, -1) {\makecell{Путь до вершины \\- критический?}};
+		\node [style=process] (9) at (9, 2) {Ограниченный перебор};
+		\node [style=decision] (15) at (0, 2) {Все задачи размещены?};
+		\node [style=none] (16) at (9, -3.5) {};
+		\node [style=none] (17) at (-6, -3.5) {};
+		\node [style=none] (18) at (-6, 2) {};
+		\node [style=startstop] (20) at (-10, -1) {Останов};
+		\node [style=none] (21) at (-5, 4) {};
+		\node [style=none] (22) at (-10, 4) {};
+	\end{pgfonlayer}
+	\begin{pgfonlayer}{edgelayer}
+		\draw [style=arrow] (1) to (3);
+		\draw [style=arrow] (5) to (6);
+		\draw [style=arrow] (6) to node [right] {Нет} (9);
+		\draw [style=arrow] (3) to (15);
+		\draw [style=arrow] (15) to node [right] {Нет} (5);
+		\draw [style=arrow] (9) to (15);
+		\draw (6) to (16.center);
+		\draw (16.center) to node [above] {Да} (17.center);
+		\draw (17.center) to (18.center);
+		\draw [style=arrow] (18.center) to (15);
+		\draw (15) to (21.center);
+		\draw (21.center) to node [above] {Да} (22.center);
+		\draw [style=arrow] (22.center) to (20);
+	\end{pgfonlayer}
+\end{tikzpicture}
