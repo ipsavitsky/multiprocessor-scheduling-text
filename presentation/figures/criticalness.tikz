@@ -1,8 +1,8 @@
 \begin{tikzpicture}
 	\begin{pgfonlayer}{nodelayer}
-		\node [style=decision] (0) at (0, 6) {Путь критический?};
+		\node [style=decision] (0) at (0, 6) {$s_i + \Delta \leq k_i$};
 		\node [style=process] (1) at (0, 0) {Удалить $d_i$ из $G$};
-		\node [style=process] (2) at (-5, 3) {\makecell{Ограниченный перебор с \\минимизацией $\sum s_k$}};
+		\node [style=process] (2) at (-5, 3) {\makecell{Ограниченный перебор $H2$}};
 		\node [style=none] (3) at (-5, 6) {};
 		\node [style=none] (4) at (-5, 0) {};
 		\node [style=process] (5) at (8, 2) {Обновить $D$};

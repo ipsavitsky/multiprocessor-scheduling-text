@@ -1,12 +1,12 @@
 \begin{tikzpicture}
 	\begin{pgfonlayer}{nodelayer}
-		\node [style=process] (0) at (0, 3) {Выбор места в соответствии с жадным критерием};
+		\node [style=process] (0) at (0, 3) {\makecell{Выбор места в соответствии \\с жадным критерием $GC2$}};
 		\node [style=process] (1) at (0, 0) {Пробное размещение};
 		\node [style=decision] (2) at (0, -3) {Место найдено?};
 		\node [style=none] (3) at (0, -9) {};
 		\node [style=none] (4) at (5, -3) {};
 		\node [style=none] (5) at (5, -9) {};
-		\node [style=process] (6) at (5, -6) {Ограниченный перебор};
+		\node [style=process] (6) at (5, -6) {\makecell{Ограниченный перебор $H1$}};
 		\node [style=none] (7) at (-8, 3) {};
 		\node [style=none] (8) at (-8, -9) {};
 	\end{pgfonlayer}

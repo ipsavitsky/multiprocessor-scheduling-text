@@ -1,11 +1,11 @@
 \begin{tikzpicture}
 	\begin{pgfonlayer}{nodelayer}
 		\node [style=startstop] (1) at (0, 7.75) {Данные};
-		\node [style=process] (3) at (0, 5) {Предподсчет};
-		\node [style=process] (5) at (0, -1) {\makecell{Размещение жадной\\стратегией}};
-		\node [style=decision] (6) at (9, -1) {\makecell{Путь до вершины \\- критический?}};
-		\node [style=process] (9) at (9, 2) {Ограниченный перебор};
-		\node [style=decision] (15) at (0, 2) {Все задачи размещены?};
+		\node [style=process] (3) at (0, 5) {Вычисление критических путей};
+		\node [style=process] (5) at (0, -1) {\makecell{Выбор и размещение \\работы в соответствии с \\жадным критерием $GC1$}};
+		\node [style=decision] (6) at (9, -1) {\makecell{$s_i + \Delta \geq k_i$}};
+		\node [style=process] (9) at (9, 2) {Ограниченный перебор $H2$};
+		\node [style=decision] (15) at (0, 2) {Все работы размещены?};
 		\node [style=none] (16) at (9, -3.5) {};
 		\node [style=none] (17) at (-6, -3.5) {};
 		\node [style=none] (18) at (-6, 2) {};
