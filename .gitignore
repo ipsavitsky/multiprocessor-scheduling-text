@@ -333,13 +333,5 @@ TSWLatexianTemp*
 *.out
 *.app
 
-CMakeFiles/
-*.cmake
-CMakeCache.txt
-code/schedule/Makefile
-code/build/schedule/Makefile
-code/build/Makefile
-code/build/compile_commands.json
-code/Makefile
-code/greedy
 .vscode/
+build/
