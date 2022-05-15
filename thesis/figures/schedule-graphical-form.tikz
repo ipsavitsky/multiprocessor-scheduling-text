@@ -30,5 +30,8 @@
 		\draw [style=arrow] (9) to (17);
 		\draw [style=arrow] (11) to (18);
 		\draw [style=arrow] (19) to (20);
+		\draw [style=arrow, bend right=60] (8) to (11);
+		\draw [style=arrow] (8) to (18);
+		\draw [style=arrow, bend left=90, looseness=1.25] (9) to (20);
 	\end{pgfonlayer}
 \end{tikzpicture}
