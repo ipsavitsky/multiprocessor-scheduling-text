@@ -1,3 +1,6 @@
+#ifndef SCHEDULE_HPP
+#define SCHEDULE_HPP
+
 #include <algorithm>
 #include <boost/graph/adjacency_list.hpp>
 #include <boost/graph/graph_traits.hpp>
@@ -21,7 +24,6 @@ class Schedule {
     double CR_BOUND = 0.4;
     double CR2_BOUND = 0.05;
 
-  private:
     struct VertexData {
         Proc proc;
     };
@@ -33,7 +35,6 @@ class Schedule {
                               VertexData, EdgeData>;
     using GraphTraits = boost::graph_traits<Graph>;
 
-  public:
     using Task = Graph::vertex_descriptor;
 
   private:
@@ -135,3 +136,5 @@ class Schedule {
     std::pair<Task_out_iterator, Task_out_iterator>
     get_successors_of_task(Task task) const;
 };
+
+#endif // SCHEDULE_HPP
