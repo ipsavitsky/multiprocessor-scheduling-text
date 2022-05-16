@@ -91,8 +91,7 @@ void Schedule::init_transmition_matrices(std::vector<std::vector<int>> tran) {
     }
 }
 
-template <typename edge_it>
-Schedule::Schedule(edge_it edge_iterator_start, edge_it edge_iterator_end,
+Schedule::Schedule(Schedule::edge_it edge_iterator_start, Schedule::edge_it edge_iterator_end,
                    int task_num, int proc_num,
                    std::vector<std::vector<int>> &task_times,
                    std::vector<std::vector<int>> &tran_times, int criterion) {

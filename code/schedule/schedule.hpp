@@ -91,7 +91,8 @@ class Schedule {
     void init_transmition_matrices(std::vector<std::vector<int>> tran);
 
     Schedule() = default;
-    template <typename edge_it>
+    
+    using edge_it = std::vector<std::pair<int, int>>::iterator;
     Schedule(edge_it edge_iterator_start, edge_it edge_iterator_end,
              int task_num, int proc_num,
              std::vector<std::vector<int>> &task_times,
