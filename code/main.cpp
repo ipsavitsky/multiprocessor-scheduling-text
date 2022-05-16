@@ -1,6 +1,11 @@
 #include "schedule/schedule.hpp"
-#include <iostream>
+#include "logging/boost_logger.hpp"
+
 #include <fstream>
+
+// move to public header of logging
+#include <boost/log/sources/severity_logger.hpp>
+#include <boost/log/sources/record_ostream.hpp>
 
 Schedule input_schedule(int criterion, std::ifstream &input) {
     int task_num, proc_num;
@@ -34,8 +39,14 @@ Schedule input_schedule(int criterion, std::ifstream &input) {
 }
 
 int main() {
+
+    init_logging();
+    // severity_level should be in a namespace!
+    boost::log::sources::severity_logger<severity_level> slg;
+
+    BOOST_LOG_SEV(slg, normal) << "hooray!";
     std::ifstream input;
-    input.open("../input.txt");
+    input.open("../input.txt"); 
     Schedule schedule = input_schedule(Schedule::NO, input);
     schedule.print_graph();
     input.close();

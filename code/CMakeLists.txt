@@ -4,16 +4,16 @@ project(Scheduling VERSION 0.1)
 
 set(CMAKE_CXX_STANDARD 20)
 
-find_package(Boost 1.74 REQUIRED COMPONENTS graph log)
+find_package(Boost 1.74 REQUIRED COMPONENTS graph)
 
 include_directories(schedule)
 
-# include_directories(schedule_io)
+include_directories(logging)
 
 add_executable(greedy main.cpp)
 
 add_subdirectory(schedule)
 
-# add_subdirectory(schedule_io)
+add_subdirectory(logging)
 
-target_link_libraries(greedy schedule Boost::graph Boost::log)
+target_link_libraries(greedy schedule Boost::graph logging)
