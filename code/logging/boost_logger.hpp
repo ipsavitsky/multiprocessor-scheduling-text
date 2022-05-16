@@ -1,18 +1,24 @@
-#ifndef BOOST_LOGGER_H_
-#define BOOST_LOGGER_H_
+#ifndef LOGGER_HPP
+#define LOGGER_HPP
 
-#include <ostream> 
+#include <boost/log/expressions.hpp>
+#include <boost/log/sources/logger.hpp>
+#include <boost/log/support/date_time.hpp>
+#include <boost/log/trivial.hpp>
+#include <boost/log/utility/setup.hpp>
 
-enum severity_level {
-    normal,
-    notification,
-    warning,
-    error,
-    critical
-};
+#define LOG_DEBUG BOOST_LOG_SEV(logger::log, boost::log::trivial::debug)
+#define LOG_INFO BOOST_LOG_SEV(logger::log, boost::log::trivial::info)
+#define LOG_WARNING BOOST_LOG_SEV(logger::log, boost::log::trivial::warning)
+#define LOG_ERROR BOOST_LOG_SEV(logger::log, boost::log::trivial::error)
 
-void init_logging();
+namespace logger {
+extern boost::log::sources::severity_logger<boost::log::trivial::severity_level>
+    log;
+extern bool verbose;
+extern bool debug;
 
-std::ostream& operator<< (std::ostream& strm, severity_level level); 
+void init();
+} // namespace logger
 
-#endif
+#endif // LOGGER_HPP
