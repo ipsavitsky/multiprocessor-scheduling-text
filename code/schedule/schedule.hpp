@@ -26,9 +26,12 @@ class Schedule {
 
     struct VertexData {
         Proc proc;
+        bool is_fictive = false;
     };
 
-    struct EdgeData {};
+    struct EdgeData {
+        int min_time = 0;
+    };
 
     using Graph =
         boost::adjacency_list<boost::vecS, boost::vecS, boost::bidirectionalS,
@@ -46,6 +49,8 @@ class Schedule {
     int double_transmitions{0};    // for CR2 in CR criterion
     int edges{0};
 
+    std::vector<std::size_t> critical_paths;
+
     Graph graph; // Tasks numerates from 0 to task_num - 1
                  // Processors numerates from 0 to proc_num - 1
 
@@ -59,7 +64,7 @@ class Schedule {
                           // best path
 
   public:
-    void print_graph();
+    void print_graph(std::ostream &out);
 
     void set_task_on_proc(Task &task, Proc &proc);
 
@@ -86,12 +91,12 @@ class Schedule {
     double calculate_CR() const;
     double calculate_CR2() const;
 
-    void init_tiers_by_topologic();
-
     void init_transmition_matrices(std::vector<std::vector<int>> tran);
 
+    std::vector<Task> get_top_vertices();
+
     Schedule() = default;
-    
+
     using edge_it = std::vector<std::pair<int, int>>::iterator;
     Schedule(edge_it edge_iterator_start, edge_it edge_iterator_end,
              int task_num, int proc_num,
@@ -136,6 +141,10 @@ class Schedule {
 
     std::pair<Task_out_iterator, Task_out_iterator>
     get_successors_of_task(Task task) const;
+
+    void create_fictive_node(std::vector<Task> D);
+
+    void calculate_critical_paths();
 };
 
 #endif // SCHEDULE_HPP

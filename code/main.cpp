@@ -1,9 +1,10 @@
-#include "schedule/schedule.hpp"
 #include "logging/boost_logger.hpp"
+#include "schedule/schedule.hpp"
 
 #include <fstream>
 
-Schedule input_schedule(int criterion, std::ifstream &input) {
+Schedule input_schedule(int criteria, std::ifstream &input) {
+    LOG_INFO << "Parsing input file";
     int task_num, proc_num;
     input >> task_num >> proc_num;
     std::vector<std::vector<int>> task_time(proc_num,
@@ -31,18 +32,42 @@ Schedule input_schedule(int criterion, std::ifstream &input) {
         }
     }
     return Schedule(edges.begin(), edges.end(), task_num, proc_num, task_time,
-                    tran_time, criterion);
+                    tran_time, criteria);
 }
 
 int main() {
-
     logger::init();
 
-    LOG_DEBUG << "Hello, world!";
+    LOG_INFO << "Starting";
 
     std::ifstream input;
-    input.open("../input.txt"); 
+    std::string filename = "../input.txt";
+    LOG_INFO << "Opening file " << filename;
+    input.open(filename);
+    if (!input.is_open()) {
+        LOG_ERROR << "Can't open file " << filename;
+        return 1;
+    }
     Schedule schedule = input_schedule(Schedule::NO, input);
-    schedule.print_graph();
     input.close();
+
+    // schedule.print_graph();
+
+    auto D = schedule.get_top_vertices();
+
+    // std::for_each(D.begin(), D.end(), [](Schedule::Task task) {
+    //     LOG_INFO << "Task " << task << " is top vertex";
+    // });
+
+    LOG_INFO << "D updated";
+
+    schedule.create_fictive_node(D);
+
+    LOG_INFO << "Fictive node created";
+
+    schedule.print_graph(std::cout);
+
+    schedule.calculate_critical_paths();
+
+    return 0;
 }

@@ -1,4 +1,5 @@
 #include "schedule.hpp"
+#include "../logging/boost_logger.hpp"
 #include <algorithm>
 #include <boost/graph/adjacency_list.hpp>
 #include <boost/graph/graph_traits.hpp>
@@ -8,14 +9,16 @@
 #include <set>
 #include <vector>
 
-void Schedule::print_graph() {
+void Schedule::print_graph(std::ostream &out) {
     for (Task curr_task = 0; curr_task < task_num; ++curr_task) {
-        std::cout << "from: " << curr_task << std::endl;
+        auto data = get(&VertexData::is_fictive, graph);
+        out << "from: " << curr_task << '(' << data[curr_task] << ')'
+            << std::endl;
         for (auto successors_it = get_successors_of_task(curr_task);
              successors_it.first != successors_it.second;
              ++successors_it.first) {
             Task child_task = *(successors_it.first);
-            std::cout << "to: " << child_task << std::endl;
+            out << "to: " << child_task << std::endl;
         }
     }
 }
@@ -91,9 +94,9 @@ void Schedule::init_transmition_matrices(std::vector<std::vector<int>> tran) {
     }
 }
 
-Schedule::Schedule(Schedule::edge_it edge_iterator_start, Schedule::edge_it edge_iterator_end,
-                   int task_num, int proc_num,
-                   std::vector<std::vector<int>> &task_times,
+Schedule::Schedule(Schedule::edge_it edge_iterator_start,
+                   Schedule::edge_it edge_iterator_end, int task_num,
+                   int proc_num, std::vector<std::vector<int>> &task_times,
                    std::vector<std::vector<int>> &tran_times, int criterion) {
     this->task_num = task_num;
     this->proc_num = proc_num;
@@ -159,6 +162,45 @@ Schedule::get_successors_of_task(Schedule::Task task) const {
     Task_out_iterator t1(edges.first, graph), t2(edges.second, graph);
     return std::pair<Schedule::Task_out_iterator, Schedule::Task_out_iterator>(
         t1, t2);
+}
+
+std::vector<Schedule::Task> Schedule::get_top_vertices() {
+    std::vector<Schedule::Task> top_vertices;
+    for (Schedule::Task task = 0; task < task_num; ++task) {
+        if (boost::in_degree(task, graph) == 0) {
+            top_vertices.push_back(task);
+        }
+    }
+    return top_vertices;
+}
+
+void Schedule::create_fictive_node(std::vector<Task> D) {
+    auto new_vert = add_vertex({0, true}, graph);
+    std::for_each(D.begin(), D.end(), [&](Task task) {
+        LOG_DEBUG << "Adding edge from " << new_vert << " to " << task;
+        add_edge(new_vert, task, {}, graph);
+    });
+    ++task_num;
+}
+
+void Schedule::calculate_critical_paths() {
+    auto fictive_nodes = get(&VertexData::is_fictive, graph);
+    if (!fictive_nodes[get_task_num() - 1]) {
+        LOG_ERROR << "last node is not fictive";
+        throw std::runtime_error("last node is not fictive");
+    }
+    for (Task curr_task = 0; curr_task < task_num; ++curr_task) {
+        if (fictive_nodes[curr_task]) {
+            continue;
+        }
+        auto out_edges = boost::out_edges(curr_task, graph);
+        auto minimal_time = std::min_element(tran_times[curr_task].begin(),
+                                             tran_times[curr_task].end());
+        for (auto edge = out_edges.first; edge != out_edges.second; ++edge) {
+            LOG_DEBUG << "setting " << *minimal_time;
+            graph[*edge].min_time = *minimal_time;
+        }
+    }
 }
 
 // class TimeDiagram {
