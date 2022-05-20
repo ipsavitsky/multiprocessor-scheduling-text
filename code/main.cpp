@@ -1,24 +1,24 @@
 #include "logging/boost_logger.hpp"
 #include "schedule/schedule.hpp"
 
+#include <boost/numeric/ublas/matrix.hpp>
+
 #include <fstream>
 
 Schedule input_schedule(int criteria, std::ifstream &input) {
     LOG_INFO << "Parsing input file";
     int task_num, proc_num;
     input >> task_num >> proc_num;
-    std::vector<std::vector<int>> task_time(proc_num,
-                                            std::vector<int>(task_num, 0)); // C
-    for (int i = 0; i < task_time.size(); ++i) {
-        for (int j = 0; j < task_time[i].size(); ++j) {
-            input >> task_time[i][j];
+    boost::numeric::ublas::matrix<int> task_time(proc_num, task_num); // C
+    for (int i = 0; i < task_time.size1(); ++i) {
+        for (int j = 0; j < task_time.size2(); ++j) {
+            input >> task_time(i, j);
         }
     }
-    std::vector<std::vector<int>> tran_time(proc_num,
-                                            std::vector<int>(proc_num, 0)); // D
-    for (int i = 0; i < tran_time.size(); ++i) {
-        for (int j = 0; j < tran_time[i].size(); ++j) {
-            input >> tran_time[i][j];
+    boost::numeric::ublas::matrix<int> tran_time(proc_num, proc_num); // D
+    for (int i = 0; i < tran_time.size1(); ++i) {
+        for (int j = 0; j < tran_time.size2(); ++j) {
+            input >> tran_time(i, j);
         }
     }
     std::vector<std::pair<int, int>> edges;
@@ -66,8 +66,6 @@ int main() {
     schedule.remove_fictive_vertices();
 
     schedule.print_graph();
-
-    
 
     return 0;
 }

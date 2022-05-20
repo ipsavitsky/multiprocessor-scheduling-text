@@ -16,10 +16,9 @@ void Schedule::print_graph() {
     for (Task curr_task = 0; curr_task < task_num; ++curr_task) {
         std::cout << "from: " << curr_task << '(' << fictiveness[curr_task]
                   << "; " << sh_path[curr_task] << ')' << std::endl;
-        for (auto successors_it = get_successors_of_task(curr_task);
-             successors_it.first != successors_it.second;
-             ++successors_it.first) {
-            Task child_task = *(successors_it.first);
+        for (auto edges = boost::out_edges(curr_task, graph);
+             edges.first != edges.second; ++edges.first) {
+            Task child_task = boost::target(*edges.first, graph);
             std::cout << "to: " << child_task << std::endl;
         }
     }
@@ -30,7 +29,8 @@ void Schedule::set_task_on_proc(Task &task, Proc &proc) {
 }
 
 int Schedule::get_tran_time(const Proc &from, const Proc &to) const {
-    return tran_times[from][to]; // change later for unlinked processors
+    // TODO: unlinked processors
+    return tran_times(from, to);
 }
 
 int Schedule::get_task_num() const { return task_num; }
@@ -39,7 +39,7 @@ int Schedule::get_proc_num() const { return proc_num; }
 
 int Schedule::get_task_time(const Schedule::Proc &proc,
                             const Schedule::Task &task) const {
-    return task_times[proc][task];
+    return task_times(proc, task);
 }
 int Schedule::get_out_degree(const Schedule::Task &task) const {
     return boost::out_degree(task, graph);
@@ -53,44 +53,26 @@ int Schedule::get_number_of_edges() const { return edges; }
 
 bool Schedule::is_direct_connection(const Schedule::Proc &proc1,
                                     const Schedule::Proc &proc2) {
-    return long_transmition[proc1][proc2] == -1;
-}
-double Schedule::calculate_BF() {
-    int max_tasks = 0;
-    for (Proc proc = 0; proc < proc_num; ++proc) {
-        max_tasks = std::max(
-            max_tasks, proc_load[proc]); // could be optimized - store max_tasks
-                                         // in schedule. But isn't required
-                                         // (compexicity will not be changed)
-    }
-    return (double)max_tasks / task_num;
+    return long_transmition(proc1, proc2) == -1;
 }
 
-double Schedule::calculate_CR() const {
-    return (double)transmitions / get_number_of_edges();
-}
-
-double Schedule::calculate_CR2() const {
-    return (double)double_transmitions / get_number_of_edges();
-}
-
-void Schedule::init_transmition_matrices(std::vector<std::vector<int>> tran) {
+void Schedule::init_transmition_matrices(
+    boost::numeric::ublas::matrix<int> tran) {
     tran_times = tran;
-    long_transmition = std::vector<std::vector<int>>(
-        tran.size(), std::vector<int>(tran[0].size()));
-    for (int i = 0; i < tran.size(); ++i) {
-        for (int j = 0; j < tran[i].size(); ++j) {
-            if (tran[i][j] == -1) {
-                for (int k = 0; k < tran.size(); ++k) {
-                    if (tran[i][k] != -1 && tran[k][j] != -1 &&
-                        (tran_times[i][j] == -1 ||
-                         tran[i][k] + tran[k][j] < tran_times[i][j])) {
-                        tran_times[i][j] = tran[i][k] + tran[k][j];
-                        long_transmition[i][j] = k;
+    long_transmition.resize(tran.size1(), tran.size2());
+    for (int i = 0; i < tran.size1(); ++i) {
+        for (int j = 0; j < tran.size2(); ++j) {
+            if (tran(i, j) == -1) {
+                for (int k = 0; k < tran.size1(); ++k) {
+                    if (tran(i, k) != -1 && tran(k, j) != -1 &&
+                        (tran_times(i, j) == -1 ||
+                         tran(i, k) + tran(k, j) < tran_times(i, j))) {
+                        tran_times(i, j) = tran(i, k) + tran(k, j);
+                        long_transmition(i, j) = k;
                     }
                 }
             } else {
-                long_transmition[i][j] = -1;
+                long_transmition(i, j) = -1;
             }
         }
     }
@@ -98,8 +80,9 @@ void Schedule::init_transmition_matrices(std::vector<std::vector<int>> tran) {
 
 Schedule::Schedule(Schedule::edge_it edge_iterator_start,
                    Schedule::edge_it edge_iterator_end, int task_num,
-                   int proc_num, std::vector<std::vector<int>> &task_times,
-                   std::vector<std::vector<int>> &tran_times, int criteria) {
+                   int proc_num, boost::numeric::ublas::matrix<int> &task_times,
+                   boost::numeric::ublas::matrix<int> &tran_times,
+                   int criteria) {
     this->task_num = task_num;
     this->proc_num = proc_num;
     graph = Graph(edge_iterator_start, edge_iterator_end, task_num);
@@ -151,21 +134,6 @@ bool Schedule::Task_out_iterator::operator!=(
     return out != rhs.out;
 }
 
-std::pair<Schedule::Task_in_iterator, Schedule::Task_in_iterator>
-Schedule::get_predecessors_of_task(Task task) const {
-    auto edges = boost::in_edges(task, graph);
-    Task_in_iterator t1(edges.first, graph), t2(edges.second, graph);
-    return {t1, t2};
-}
-
-std::pair<Schedule::Task_out_iterator, Schedule::Task_out_iterator>
-Schedule::get_successors_of_task(Schedule::Task task) const {
-    auto edges = boost::out_edges(task, graph);
-    Task_out_iterator t1(edges.first, graph), t2(edges.second, graph);
-    return std::pair<Schedule::Task_out_iterator, Schedule::Task_out_iterator>(
-        t1, t2);
-}
-
 std::vector<Schedule::Task> Schedule::get_top_vertices() {
     std::vector<Schedule::Task> top_vertices;
     for (Schedule::Task task = 0; task < task_num; ++task) {
@@ -197,8 +165,8 @@ void Schedule::set_up_critical_paths() {
             fictive_node = curr_task;
         } else {
             for (auto i = 0; i < proc_num; ++i) {
-                if (task_times[i][curr_task] < min_time) {
-                    min_time = task_times[i][curr_task];
+                if (task_times(i, curr_task) < min_time) {
+                    min_time = task_times(i, curr_task);
                 }
             }
         }
