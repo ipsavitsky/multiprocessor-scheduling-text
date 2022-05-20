@@ -1,0 +1,25 @@
+Алгоритм реализован на языке \lstinline{C++} с помощюь фреймворка \lstinline{boost}.
+
+Проект обладает следующей структурой:
+\begin{enumerate}
+    \item \lstinline{logging} - функции настройки логирования для проекта. Реализовано на основе \lstinline{Boost::log}
+    \item \lstinline{schedule} - модуль для работы с графом входных данных и матрицами $C$ и $D$, подаваемыми на вход. Реализован на основе \lstinline{Boost::graph} и \lstinline{Boost::uBLAS}.
+    \item \lstinline{time_schedule} - модуль для работы с временной диаграммой. 
+    \item \lstinline{main.cpp} - \lstinline{main()} программы. Основной алгоритм реализован тут.
+    \item \lstinline{Doxyfile} - файл с настройками \lstinline{Doxygen}.
+\end{enumerate}
+
+Для сборки проекта используется \lstinline{CMake}.
+\begin{lstlisting}[language=bash, caption=Сборка проекта]
+    mkdir build
+    cd build
+    cmake ..
+    make
+\end{lstlisting}
+
+В зависимостях проекта стоит \lstinline{boost} версии 1.74, хотя, в теории, более ранние версии могут поддерживаться.
+
+Для сборки документации (на английском) используется \lstinline{Doxygen}.
+\begin{lstlisting}[language=bash, caption=Сборка документации]
+    doxygen Doxyfile
+\end{lstlisting}
