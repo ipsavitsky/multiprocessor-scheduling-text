@@ -1,11 +1,12 @@
 #include "logging/boost_logger.hpp"
 #include "schedule/schedule.hpp"
+#include "time_schedule/time_schedule.hpp"
 
 #include <boost/numeric/ublas/matrix.hpp>
 
 #include <fstream>
 
-Schedule input_schedule(int criteria, std::ifstream &input) {
+Schedule input_schedule(std::ifstream &input) {
     LOG_INFO << "Parsing input file";
     int task_num, proc_num;
     input >> task_num >> proc_num;
@@ -32,7 +33,7 @@ Schedule input_schedule(int criteria, std::ifstream &input) {
         }
     }
     return Schedule(edges.begin(), edges.end(), task_num, proc_num, task_time,
-                    tran_time, criteria);
+                    tran_time);
 }
 
 int main() {
@@ -48,7 +49,7 @@ int main() {
         LOG_ERROR << "Can't open file " << filename;
         return 1;
     }
-    Schedule schedule = input_schedule(Schedule::NO, input);
+    Schedule schedule = input_schedule(input);
     input.close();
 
     auto D = schedule.get_top_vertices();
@@ -66,6 +67,14 @@ int main() {
     schedule.remove_fictive_vertices();
 
     schedule.print_graph();
+
+    auto chosen_task = schedule.GC1(D);
+
+    LOG_INFO << "GC1 chose " << chosen_task;
+
+    TimeSchedule time_schedule;
+
+    time_schedule.test_add_task(schedule, 0, 0);
 
     return 0;
 }

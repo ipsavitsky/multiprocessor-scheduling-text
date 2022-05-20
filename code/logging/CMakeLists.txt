@@ -3,6 +3,8 @@ project(logging)
 
 set(CMAKE_CXX_STANDARD 20)
 
+# set(CMAKE_CXX_CLANG_TIDY "clang-tidy;-checks=*")
+
 find_package(Boost 1.74 REQUIRED COMPONENTS log)
 
 add_library(logging STATIC boost_logger.cpp)

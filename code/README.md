@@ -8,3 +8,9 @@ cd build
 cmake ..
 make
 ```
+
+## Build docs
+
+```bash
+doxygen Doxyfile
+```
