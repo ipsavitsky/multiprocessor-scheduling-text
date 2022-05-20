@@ -51,13 +51,7 @@ int main() {
     Schedule schedule = input_schedule(Schedule::NO, input);
     input.close();
 
-    // schedule.print_graph();
-
     auto D = schedule.get_top_vertices();
-
-    // std::for_each(D.begin(), D.end(), [](Schedule::Task task) {
-    //     LOG_INFO << "Task " << task << " is top vertex";
-    // });
 
     LOG_INFO << "D updated";
 
@@ -65,9 +59,15 @@ int main() {
 
     LOG_INFO << "Fictive node created";
 
-    schedule.print_graph(std::cout);
+    schedule.set_up_critical_paths();
 
-    schedule.calculate_critical_paths();
+    LOG_INFO << "Calculated critical paths";
+
+    schedule.remove_fictive_vertices();
+
+    schedule.print_graph();
+
+    
 
     return 0;
 }

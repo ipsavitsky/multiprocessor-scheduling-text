@@ -32,7 +32,9 @@ void init() {
         fmtSeverity % boost::log::expressions::smessage;
 
     auto console_sink = boost::log::add_console_log(std::clog);
+    auto file_sink = boost::log::add_file_log("greedy.log");
     console_sink->set_formatter(logFmt);
+    file_sink->set_formatter(logFmt);
 }
 
 } // namespace logger

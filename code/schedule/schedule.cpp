@@ -2,6 +2,7 @@
 #include "../logging/boost_logger.hpp"
 #include <algorithm>
 #include <boost/graph/adjacency_list.hpp>
+#include <boost/graph/dijkstra_shortest_paths.hpp>
 #include <boost/graph/graph_traits.hpp>
 #include <boost/graph/topological_sort.hpp>
 #include <boost/property_map/property_map.hpp>
@@ -9,16 +10,17 @@
 #include <set>
 #include <vector>
 
-void Schedule::print_graph(std::ostream &out) {
+void Schedule::print_graph() {
+    auto fictiveness = get(&VertexData::is_fictive, graph);
+    auto sh_path = get(&VertexData::shortest_path_length, graph);
     for (Task curr_task = 0; curr_task < task_num; ++curr_task) {
-        auto data = get(&VertexData::is_fictive, graph);
-        out << "from: " << curr_task << '(' << data[curr_task] << ')'
-            << std::endl;
+        std::cout << "from: " << curr_task << '(' << fictiveness[curr_task]
+                  << "; " << sh_path[curr_task] << ')' << std::endl;
         for (auto successors_it = get_successors_of_task(curr_task);
              successors_it.first != successors_it.second;
              ++successors_it.first) {
             Task child_task = *(successors_it.first);
-            out << "to: " << child_task << std::endl;
+            std::cout << "to: " << child_task << std::endl;
         }
     }
 }
@@ -97,14 +99,14 @@ void Schedule::init_transmition_matrices(std::vector<std::vector<int>> tran) {
 Schedule::Schedule(Schedule::edge_it edge_iterator_start,
                    Schedule::edge_it edge_iterator_end, int task_num,
                    int proc_num, std::vector<std::vector<int>> &task_times,
-                   std::vector<std::vector<int>> &tran_times, int criterion) {
+                   std::vector<std::vector<int>> &tran_times, int criteria) {
     this->task_num = task_num;
     this->proc_num = proc_num;
     graph = Graph(edge_iterator_start, edge_iterator_end, task_num);
     edges = boost::num_edges(graph);
     this->task_times = task_times;
     init_transmition_matrices(tran_times);
-    this->criterion = criterion;
+    this->criteria = criteria;
 }
 
 Schedule::Schedule(const Schedule &schedule) {
@@ -114,7 +116,7 @@ Schedule::Schedule(const Schedule &schedule) {
     task_times = schedule.task_times;
     tran_times = schedule.tran_times;
     long_transmition = schedule.long_transmition;
-    criterion = schedule.criterion;
+    criteria = schedule.criteria;
     edges = schedule.edges;
     transmitions = schedule.transmitions;
     proc_load = schedule.proc_load;
@@ -175,96 +177,60 @@ std::vector<Schedule::Task> Schedule::get_top_vertices() {
 }
 
 void Schedule::create_fictive_node(std::vector<Task> D) {
-    auto new_vert = add_vertex({0, true}, graph);
+    auto new_vert = add_vertex({0, 0, true}, graph);
     std::for_each(D.begin(), D.end(), [&](Task task) {
         LOG_DEBUG << "Adding edge from " << new_vert << " to " << task;
-        add_edge(new_vert, task, {}, graph);
+        add_edge(new_vert, task, {0}, graph);
     });
     ++task_num;
 }
 
-void Schedule::calculate_critical_paths() {
-    auto fictive_nodes = get(&VertexData::is_fictive, graph);
-    if (!fictive_nodes[get_task_num() - 1]) {
-        LOG_ERROR << "last node is not fictive";
-        throw std::runtime_error("last node is not fictive");
-    }
+void Schedule::set_up_critical_paths() {
+    Task fictive_node;
+
     for (Task curr_task = 0; curr_task < task_num; ++curr_task) {
-        if (fictive_nodes[curr_task]) {
-            continue;
-        }
         auto out_edges = boost::out_edges(curr_task, graph);
-        auto minimal_time = std::min_element(tran_times[curr_task].begin(),
-                                             tran_times[curr_task].end());
-        for (auto edge = out_edges.first; edge != out_edges.second; ++edge) {
-            LOG_DEBUG << "setting " << *minimal_time;
-            graph[*edge].min_time = *minimal_time;
+        // TODO: change this!!!
+        size_t min_time = std::numeric_limits<size_t>::max();
+        if (graph[curr_task].is_fictive) {
+            min_time = 0;
+            fictive_node = curr_task;
+        } else {
+            for (auto i = 0; i < proc_num; ++i) {
+                if (task_times[i][curr_task] < min_time) {
+                    min_time = task_times[i][curr_task];
+                }
+            }
+        }
+        LOG_DEBUG << "min time on " << curr_task << " is " << min_time;
+        std::for_each(out_edges.first, out_edges.second,
+                      [&](auto edge) { graph[edge].min_time = min_time; });
+    }
+    LOG_DEBUG << "fictive node is " << fictive_node;
+    boost::dijkstra_shortest_paths(
+        graph, fictive_node,
+        distance_map(get(&VertexData::shortest_path_length, graph))
+            .weight_map(get(&EdgeData::min_time, graph)));
+}
+
+void Schedule::remove_fictive_vertices() {
+    for (Task task = 0; task < task_num; ++task) {
+        if (graph[task].is_fictive) {
+            LOG_DEBUG << "removing fictive node " << task;
+            remove_vertex(task);
         }
     }
 }
 
-// class TimeDiagram {
-//     std::map<Schedule::Task, Schedule::Proc> procs;
-//     std::map<Schedule::Task, int> task_start;
-//     std::map<Schedule::Task, int> task_finish;
+void Schedule::remove_vertex(const Task &task) {
+    boost::clear_vertex(task, graph);
+    boost::remove_vertex(task, graph);
+    --task_num;
+}
 
-//   public:
-//     TimeDiagram() = default;
-//     TimeDiagram(const Schedule &schedule);
-//     int get_time() const {
-//         int max_time = 0;
-//         for (auto &[task, time] : task_finish) {
-//             max_time = std::max(max_time, time);
-//         }
-//         return max_time;
-//     }
-//     std::map<Schedule::Task, Schedule::Proc> get_procs() const { return
-//     procs; } int get_task_start(const Schedule::Task &task) { return
-//     task_start[task]; } int get_task_finish(const Schedule::Task &task) {
-//         return task_finish[task];
-//     }
-// };
-
-// TimeDiagram::TimeDiagram(const Schedule &schedule) {
-//     const int task_num = schedule.get_task_num();
-//     const int proc_num = schedule.get_proc_num();
-//     std::map<Schedule::Proc, int>
-//         times; // current finish time of each processor
-//     for (int i = 0; i < task_num; ++i) { // i is current tier
-//         Schedule::Task curr_task = schedule.get_task_by_tier(i);
-//         Schedule::Proc curr_proc = schedule.get_proc_by_task(curr_task);
-//         int min_time = times[curr_proc]; // minimum time that is allowed for
-//                                          // task to start from
-//         for (std::pair<Schedule::Task_in_iterator,
-//         Schedule::Task_in_iterator>
-//                  predecessors_it =
-//                  schedule.get_predecessors_of_task(curr_task);
-//              predecessors_it.first != predecessors_it.second;
-//              ++predecessors_it.first) {
-//             // pass through all parents to finds min_time
-//             Schedule::Task parent_task = *(predecessors_it.first);
-//             Schedule::Proc parent_proc =
-//             schedule.get_proc_by_task(parent_task); if
-//             (predecessors_it.first.from_fictive()) {
-//                 if (parent_proc != curr_proc) {
-//                     int total_time = task_start[parent_task];
-//                     min_time = std::max(min_time, total_time);
-//                 } else {
-//                     int total_time = task_finish[parent_task];
-//                     min_time = std::max(min_time, total_time);
-//                 }
-//             } else {
-//                 int total_time = task_finish[parent_task] +
-//                                  schedule.get_tran_time(parent_proc,
-//                                  curr_proc);
-//                 min_time = std::max(min_time, total_time);
-//             }
-//         }
-//         procs[curr_task] = curr_proc;
-//         task_start[curr_task] = min_time;
-//         task_finish[curr_task] =
-//             min_time + schedule.get_task_time(curr_proc, curr_task);
-//         times[curr_proc] =
-//             min_time + schedule.get_task_time(curr_proc, curr_task);
-//     }
-// }
+Schedule::Task Schedule::GC1(std::vector<Task> D) {
+    return *std::max_element(D.begin(), D.end(), [&](Task task1, Task task2) {
+        return boost::out_degree(task1, graph) <
+               boost::out_degree(task2, graph);
+    });
+}

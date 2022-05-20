@@ -26,6 +26,7 @@ class Schedule {
 
     struct VertexData {
         Proc proc;
+        int shortest_path_length;
         bool is_fictive = false;
     };
 
@@ -43,10 +44,10 @@ class Schedule {
   private:
     int task_num;
     int proc_num;
-    int criterion{NO};
-    std::map<Proc, int> proc_load; // for BF criterion
-    int transmitions{0};           // for CR criterion
-    int double_transmitions{0};    // for CR2 in CR criterion
+    int criteria{NO};
+    std::map<Proc, int> proc_load; // for BF criteria
+    int transmitions{0};           // for CR criteria
+    int double_transmitions{0};    // for CR2 in CR criteria
     int edges{0};
 
     std::vector<std::size_t> critical_paths;
@@ -64,7 +65,7 @@ class Schedule {
                           // best path
 
   public:
-    void print_graph(std::ostream &out);
+    void print_graph();
 
     void set_task_on_proc(Task &task, Proc &proc);
 
@@ -84,6 +85,10 @@ class Schedule {
 
     int get_number_of_edges() const;
 
+    void remove_fictive_vertices();
+
+    void remove_vertex(const Task &task);
+
     bool is_direct_connection(const Proc &proc1, const Proc &proc2);
 
     double calculate_BF();
@@ -101,7 +106,7 @@ class Schedule {
     Schedule(edge_it edge_iterator_start, edge_it edge_iterator_end,
              int task_num, int proc_num,
              std::vector<std::vector<int>> &task_times,
-             std::vector<std::vector<int>> &tran_times, int criterion = NO);
+             std::vector<std::vector<int>> &tran_times, int criteria = NO);
 
     Schedule(const Schedule &schedule);
 
@@ -144,7 +149,9 @@ class Schedule {
 
     void create_fictive_node(std::vector<Task> D);
 
-    void calculate_critical_paths();
+    void set_up_critical_paths();
+
+    Task GC1(std::vector<Task> D);
 };
 
 #endif // SCHEDULE_HPP
