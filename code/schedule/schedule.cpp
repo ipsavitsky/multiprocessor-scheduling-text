@@ -14,8 +14,9 @@ void Schedule::print_graph() {
     auto fictiveness = get(&VertexData::is_fictive, graph);
     auto sh_path = get(&VertexData::shortest_path_length, graph);
     for (Task curr_task = 0; curr_task < task_num; ++curr_task) {
-        std::cout << "from: " << curr_task << '(' << fictiveness[curr_task]
-                  << "; " << sh_path[curr_task] << ')' << std::endl;
+        std::cout << std::boolalpha << "from: " << curr_task << " ("
+                  << fictiveness[curr_task] << "; " << sh_path[curr_task] << ')'
+                  << std::noboolalpha << std::endl;
         for (auto edges = boost::out_edges(curr_task, graph);
              edges.first != edges.second; ++edges.first) {
             Task child_task = boost::target(*edges.first, graph);
@@ -103,35 +104,6 @@ Schedule::Schedule(const Schedule &schedule) {
     edges = schedule.edges;
     transmitions = schedule.transmitions;
     proc_load = schedule.proc_load;
-}
-
-Schedule::Task Schedule::Task_in_iterator::operator*() {
-    return boost::source(*in, graph);
-}
-
-Schedule::Task_in_iterator &Schedule::Task_in_iterator::operator++() {
-    ++in;
-    return *this;
-}
-
-bool Schedule::Task_in_iterator::operator!=(
-    const Schedule::Task_in_iterator &rhs) {
-    return in != rhs.in; // it doesn't check graph (but information about it
-                         // could be in in_edge_iterator)
-}
-
-Schedule::Task Schedule::Task_out_iterator::operator*() {
-    return boost::target(*out, graph);
-}
-
-Schedule::Task_out_iterator &Schedule::Task_out_iterator::operator++() {
-    ++out;
-    return *this;
-}
-
-bool Schedule::Task_out_iterator::operator!=(
-    const Schedule::Task_out_iterator &rhs) {
-    return out != rhs.out;
 }
 
 std::vector<Schedule::Task> Schedule::get_top_vertices() {

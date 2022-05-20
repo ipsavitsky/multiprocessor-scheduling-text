@@ -103,43 +103,6 @@ class Schedule {
 
     Schedule(const Schedule &schedule);
 
-    class Task_in_iterator { // doesn't change anything in graph
-        const Graph &graph;
-        GraphTraits::in_edge_iterator
-            in; // better be reference, but '!=' is not working because of local
-                // objects (can't return it from get_predecessors_of_task)
-      public:
-        Task_in_iterator(Task_in_iterator &it) : graph(it.graph), in(it.in) {}
-        Task_in_iterator(GraphTraits::in_edge_iterator &in_edge,
-                         const Graph &in_graph)
-            : in(in_edge), graph(in_graph) {}
-
-        Task operator*();
-        Task_in_iterator &operator++();
-        bool operator!=(const Task_in_iterator &rhs);
-    };
-
-    class Task_out_iterator { // doesn't change anything in graph
-        const Graph &graph;
-        GraphTraits::out_edge_iterator out;
-
-      public:
-        Task_out_iterator(Task_out_iterator &it)
-            : graph(it.graph), out(it.out) {}
-        Task_out_iterator(GraphTraits::out_edge_iterator &out_edge,
-                          const Graph &out_graph)
-            : graph(out_graph), out(out_edge) {}
-        Task operator*();
-        Task_out_iterator &operator++();
-        bool operator!=(const Task_out_iterator &rhs);
-    };
-
-    std::pair<Task_in_iterator, Task_in_iterator>
-    get_predecessors_of_task(Task task);
-
-    std::pair<Task_out_iterator, Task_out_iterator>
-    get_successors_of_task(Task task);
-
     void create_fictive_node(std::vector<Task> D);
 
     void set_up_critical_paths();
