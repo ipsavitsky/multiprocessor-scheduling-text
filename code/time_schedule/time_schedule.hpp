@@ -13,9 +13,15 @@
  */
 class TimeSchedule {
   private:
-    std::map<Schedule::Task, Schedule::Proc> procs;
-    std::map<Schedule::Task, int> task_start;
-    std::map<Schedule::Task, int> task_finish;
+    struct PlacedTask {
+        Schedule::Task task;
+        int start;
+        int finish;
+    };
+    using proc_info = std::vector<PlacedTask>;
+    std::vector<proc_info> proc_array;
+
+    std::map<Schedule::Task, Schedule::Proc> fast_mapping;
 
   public:
     /**
@@ -28,7 +34,7 @@ class TimeSchedule {
         BF,
     };
 
-    TimeSchedule() = default;
+    TimeSchedule(size_t proc_num);
     int get_time() const;
     std::map<Schedule::Task, Schedule::Proc> get_procs() const;
     int get_task_start(const Schedule::Task &task) const;
@@ -37,6 +43,7 @@ class TimeSchedule {
                   const int &start, const int &finish);
     int test_add_task(Schedule sched, const Schedule::Task &task,
                       const Schedule::Proc &proc);
+    Schedule::Proc GC2(Schedule sched, Schedule::Task task);
 };
 
 #endif

@@ -1,46 +1,26 @@
 #include "time_schedule.hpp"
 #include <algorithm>
 
+TimeSchedule::TimeSchedule(size_t proc_num) {
+    proc_array.resize(proc_num);
+    // for (auto &proc : proc_array) {
+    //     // TODO change this of course
+    //     proc.reserve(1);
+    // }
+}
+
 /**
  * @brief Get the time it takes the schedule to execute
  *
  * @return int
  */
 int TimeSchedule::get_time() const {
-    int max_time = 0;
-    for (auto &[task, time] : task_finish) {
-        max_time = std::max(max_time, time);
-    }
-    return max_time;
-}
-
-/**
- * @brief Get the mappping of tasks to processors
- *
- * @return std::map<Schedule::Task, Schedule::Proc>
- */
-std::map<Schedule::Task, Schedule::Proc> TimeSchedule::get_procs() const {
-    return procs;
-}
-
-/**
- * @brief Get the time the task starts
- *
- * @param task The task
- * @return int
- */
-int TimeSchedule::get_task_start(const Schedule::Task &task) const {
-    return task_start.at(task);
-}
-
-/**
- * @brief Get the time the task ends
- *
- * @param task The task
- * @return int
- */
-int TimeSchedule::get_task_finish(const Schedule::Task &task) const {
-    return task_finish.at(task);
+    std::vector<int> task_time;
+    std::for_each(proc_array.begin(), proc_array.end(),
+                  [&task_time](const proc_info &proc) {
+                      task_time.push_back(proc.back().finish);
+                  });
+    return *std::max_element(task_time.begin(), task_time.end());
 }
 
 /**
@@ -54,16 +34,16 @@ int TimeSchedule::get_task_finish(const Schedule::Task &task) const {
 void TimeSchedule::add_task(const Schedule::Task &task,
                             const Schedule::Proc &proc, const int &start,
                             const int &finish) {
-    procs[task] = proc;
-    task_start[task] = start;
-    task_finish[task] = finish;
+    PlacedTask placed_task{task, start, finish};
+    proc_array[proc].push_back(placed_task);
+    fast_mapping[task] = proc;
 }
 
 /**
  * @brief Test if a task can be added to the schedule
  *
  * @todo Not finished
- * 
+ *
  * @param sched Schedule with all dependencies
  * @param task Task to add
  * @param proc Processor to assign to the task
@@ -71,12 +51,42 @@ void TimeSchedule::add_task(const Schedule::Task &task,
  */
 int TimeSchedule::test_add_task(Schedule sched, const Schedule::Task &task,
                                 const Schedule::Proc &proc) {
+    std::vector<int> times;
     for (auto it = sched.get_in_edges(task); it.first != it.second;
          ++it.first) {
         auto from = boost::source(*it.first, sched.get_graph());
         LOG_DEBUG << "from: " << from << " to: " << task;
-        int trans_time = sched.get_tran_time(from, task);
-        LOG_DEBUG << trans_time;
+        int trans_time = sched.get_task_time(proc, task);
+        int task_time = sched.get_tran_time(fast_mapping[from], proc);
+        LOG_DEBUG << "trans_time: " << trans_time
+                  << "; tran_time: " << task_time;
+        times.push_back(trans_time + task_time);
     }
-    return 123;
+    auto first_available_dependencies =
+        *std::max_element(times.begin(), times.end());
+
+    auto stuff = proc_array[proc];
+    int first_available_processor;
+    if (stuff.begin() != stuff.end()) {
+        first_available_processor =
+            std::max_element(proc_array[proc].begin(), proc_array[proc].end(),
+                             [](const PlacedTask &a, const PlacedTask &b) {
+                                 return a.finish < b.finish;
+                             })
+                ->finish;
+    } else {
+        first_available_processor = 0;
+    }
+    return std::max(first_available_dependencies, first_available_processor);
+}
+
+Schedule::Proc TimeSchedule::GC2(Schedule sched, Schedule::Task task) {
+    std::vector<std::pair<Schedule::Proc, int>> times;
+    for(int i = 0; i < proc_array.size(); i++) {
+        times.push_back(std::make_pair(i, test_add_task(sched, task, proc_array[i].back().finish)));
+    }
+    auto best_proc = std::min_element(times.begin(), times.end(), [](const auto &a, const auto &b) {
+        return a.second < b.second;
+    });
+    return best_proc->first;
 }

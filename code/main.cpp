@@ -72,9 +72,9 @@ int main() {
 
     LOG_INFO << "GC1 chose " << chosen_task;
 
-    TimeSchedule time_schedule;
+    TimeSchedule time_schedule(schedule.get_proc_num());
 
-    time_schedule.test_add_task(schedule, 0, 0);
+    time_schedule.test_add_task(schedule, 4, 2);
 
     return 0;
 }
