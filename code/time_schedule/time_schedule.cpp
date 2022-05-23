@@ -31,10 +31,10 @@ int TimeSchedule::get_time() const {
  * @param start Start of the task
  * @param finish End of the task
  */
-void TimeSchedule::add_task(const Schedule::Task &task,
-                            const Schedule::Proc &proc, const int &start,
-                            const int &finish) {
-    PlacedTask placed_task{task, start, finish};
+void TimeSchedule::add_task(const Schedule &sched, const Schedule::Task &task,
+                            const Schedule::Proc &proc) {
+    auto x = test_add_task(sched, task, proc);
+    PlacedTask placed_task{task, x, x + sched.get_task_time(proc, task)};
     proc_array[proc].push_back(placed_task);
     fast_mapping[task] = proc;
 }
@@ -83,8 +83,8 @@ int TimeSchedule::test_add_task(Schedule sched, const Schedule::Task &task,
 Schedule::Proc TimeSchedule::GC2(Schedule sched, Schedule::Task task) {
     std::vector<std::pair<Schedule::Proc, int>> times;
     for (int i = 0; i < proc_array.size(); i++) {
-        times.push_back(std::make_pair(
-            i, test_add_task(sched, task, proc_array[i].back().finish)));
+        times.push_back(
+            {i, test_add_task(sched, task, i)});
     }
     auto best_proc = std::min_element(
         times.begin(), times.end(),

@@ -3,6 +3,7 @@
 #include "time_schedule/time_schedule.hpp"
 
 #include <boost/numeric/ublas/matrix.hpp>
+#include <boost/program_options.hpp>
 
 #include <fstream>
 
@@ -36,21 +37,55 @@ Schedule input_schedule(std::ifstream &input) {
                     tran_time);
 }
 
-int main() {
+int main(int argc, char *argv[]) {
     logger::init();
 
     LOG_INFO << "Starting";
 
+    boost::program_options::options_description desc("General options");
+    std::string str_criteria;
+    std::string filename;
+    desc.add_options()("help,h", "Print help")(
+        "input,i",
+        boost::program_options::value<std::string>(&filename)->default_value(
+            "../input.txt"),
+        "Input file")("criteria,c",
+                      boost::program_options::value<std::string>(&str_criteria)
+                          ->default_value("NO"),
+                      "Extra criteria for time schedule");
+    boost::program_options::variables_map vm;
+    boost::program_options::store(
+        boost::program_options::parse_command_line(argc, argv, desc), vm);
+    boost::program_options::notify(vm);
+
+    if (vm.count("help")) {
+        std::cout << desc << std::endl;
+        return 0;
+    }
+
+    TimeSchedule::extra_criteria criteria;
+    if (str_criteria == "NO") {
+        criteria = TimeSchedule::extra_criteria::NO;
+    } else if (str_criteria == "BF") {
+        criteria = TimeSchedule::extra_criteria::BF;
+    } else if (str_criteria == "CR") {
+        criteria = TimeSchedule::extra_criteria::CR;
+    } else {
+        LOG_ERROR << "Unknown criteria: " << str_criteria;
+        return 1;
+    }
+
     std::ifstream input;
-    std::string filename = "../input.txt";
     LOG_INFO << "Opening file " << filename;
     input.open(filename);
     if (!input.is_open()) {
         LOG_ERROR << "Can't open file " << filename;
         return 1;
     }
+
     Schedule schedule = input_schedule(input);
     input.close();
+    TimeSchedule time_schedule(schedule.get_proc_num());
 
     auto D = schedule.get_top_vertices();
 
@@ -68,13 +103,24 @@ int main() {
 
     schedule.print_graph();
 
-    auto chosen_task = schedule.GC1(D);
-
-    LOG_INFO << "GC1 chose " << chosen_task;
-
-    TimeSchedule time_schedule(schedule.get_proc_num());
-
-    time_schedule.test_add_task(schedule, 4, 2);
-
+    while (!D.empty()) {
+        auto chosen_task = schedule.GC1(D);
+        LOG_INFO << "GC1 chosen " << chosen_task;
+        Schedule::Proc chosen_proc;
+        switch (criteria) {
+        case TimeSchedule::extra_criteria::NO:
+            chosen_proc = time_schedule.GC2(schedule, chosen_task);
+            time_schedule.add_task(schedule, chosen_task, chosen_proc);
+            break;
+        case TimeSchedule::extra_criteria::CR:
+            break;
+        case TimeSchedule::extra_criteria::BF:
+            break;
+        }
+        // time_schedule.test_add_task(schedule, 4, 2);
+        schedule.remove_vertex(chosen_task);
+        D = schedule.get_top_vertices();
+    }
+    LOG_INFO << "final time is " << time_schedule.get_time();
     return 0;
 }
