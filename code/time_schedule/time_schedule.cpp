@@ -82,11 +82,33 @@ int TimeSchedule::test_add_task(Schedule sched, const Schedule::Task &task,
 
 Schedule::Proc TimeSchedule::GC2(Schedule sched, Schedule::Task task) {
     std::vector<std::pair<Schedule::Proc, int>> times;
-    for(int i = 0; i < proc_array.size(); i++) {
-        times.push_back(std::make_pair(i, test_add_task(sched, task, proc_array[i].back().finish)));
+    for (int i = 0; i < proc_array.size(); i++) {
+        times.push_back(std::make_pair(
+            i, test_add_task(sched, task, proc_array[i].back().finish)));
     }
-    auto best_proc = std::min_element(times.begin(), times.end(), [](const auto &a, const auto &b) {
-        return a.second < b.second;
-    });
+    auto best_proc = std::min_element(
+        times.begin(), times.end(),
+        [](const auto &a, const auto &b) { return a.second < b.second; });
     return best_proc->first;
 }
+
+double TimeSchedule::calculate_BF() const {
+    auto max_tasks =
+        std::max_element(proc_array.begin(), proc_array.end(),
+                         [](const proc_info &a, const proc_info &b) {
+                             return a.size() < b.size();
+                         })
+            ->size();
+    size_t amount_of_tasks = 0;
+    for (auto &proc : proc_array) {
+        amount_of_tasks += proc.size();
+    }
+    double BF = 100 * ((max_tasks * proc_array.size() / amount_of_tasks) - 1);
+    return std::ceil(BF);
+}
+
+double TimeSchedule::calculate_CR(Schedule sched) const {
+    return amount_of_transitions / boost::num_edges(sched.get_graph());
+}
+
+double TimeSchedule::calculate_CR2() const {}

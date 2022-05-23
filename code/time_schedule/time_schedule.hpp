@@ -22,6 +22,11 @@ class TimeSchedule {
     std::vector<proc_info> proc_array;
 
     std::map<Schedule::Task, Schedule::Proc> fast_mapping;
+    /**
+     * @todo add control of amount of transitions
+     * 
+     */
+    std::size_t amount_of_transitions;
 
   public:
     /**
@@ -32,7 +37,7 @@ class TimeSchedule {
         NO,
         CR,
         BF,
-    };
+    } criteria;
 
     TimeSchedule(size_t proc_num);
     int get_time() const;
@@ -44,6 +49,9 @@ class TimeSchedule {
     int test_add_task(Schedule sched, const Schedule::Task &task,
                       const Schedule::Proc &proc);
     Schedule::Proc GC2(Schedule sched, Schedule::Task task);
+    double calculate_BF() const;
+    double calculate_CR() const;
+    double calculate_CR2() const;
 };
 
 #endif
