@@ -1,9 +1,7 @@
 #include "time_schedule.hpp"
 #include <algorithm>
 
-TimeSchedule::TimeSchedule(size_t proc_num) {
-    proc_array.resize(proc_num);
-}
+TimeSchedule::TimeSchedule(size_t proc_num) { proc_array.resize(proc_num); }
 
 /**
  * @brief Get the time it takes the schedule to execute
@@ -85,6 +83,31 @@ Schedule::Proc TimeSchedule::GC2(Schedule sched, Schedule::Task task) {
         times.begin(), times.end(),
         [](const auto &a, const auto &b) { return a.second < b.second; });
     return best_proc->first;
+}
+
+Schedule::Proc TimeSchedule::GC2_CR(Schedule sched, Schedule::Task task,
+                                    double C1, double C2, double C3) {
+    throw std::runtime_error("Not implemented");
+}
+
+Schedule::Proc TimeSchedule::GC2_BF(Schedule sched, Schedule::Task task,
+                                    double C1, double C2) {
+    std::vector<std::pair<Schedule::Proc, int>> times;
+    for (int i = 0; i < proc_array.size(); i++) {
+        times.push_back({i, C1 * test_add_task(sched, task, i) +
+                                C2 * BF_with_task(sched, task, i)});
+    }
+    return std::min_element(
+               times.begin(), times.end(),
+               [](const auto &a, const auto &b) { return a.second < b.second; })
+        ->first;
+}
+
+double TimeSchedule::BF_with_task(Schedule sched, Schedule::Task task,
+                                  Schedule::Proc proc) {
+    TimeSchedule copy(*this);
+    copy.add_task(sched, task, proc);
+    return copy.calculate_BF();
 }
 
 double TimeSchedule::calculate_BF() const {

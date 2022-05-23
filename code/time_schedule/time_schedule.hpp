@@ -46,7 +46,13 @@ class TimeSchedule {
     int test_add_task(Schedule sched, const Schedule::Task &task,
                       const Schedule::Proc &proc);
     Schedule::Proc GC2(Schedule sched, Schedule::Task task);
+    Schedule::Proc GC2_BF(Schedule sched, Schedule::Task task, double C1,
+                          double C2);
+    Schedule::Proc GC2_CR(Schedule sched, Schedule::Task task, double C1,
+                          double C2, double C3);
     double calculate_BF() const;
+    double BF_with_task(Schedule sched, Schedule::Task task,
+                        Schedule::Proc proc);
     double calculate_CR(Schedule sched) const;
     double calculate_CR2() const;
 };

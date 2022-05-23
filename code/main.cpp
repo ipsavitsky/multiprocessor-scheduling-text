@@ -105,6 +105,10 @@ int main(int argc, char *argv[]) {
 
     // schedule.print_graph();
 
+    double C1 = 0.1;
+    double C2 = 0.1;
+    double C3 = 0.1;
+
     while (!D.empty()) {
         auto chosen_task = schedule.GC1(D);
         LOG_INFO << "GC1 chosen " << chosen_task;
@@ -112,16 +116,17 @@ int main(int argc, char *argv[]) {
         switch (criteria) {
         case TimeSchedule::extra_criteria::NO:
             chosen_proc = time_schedule.GC2(schedule, chosen_task);
-            LOG_INFO << "GC2 chosen " << chosen_proc;
-            time_schedule.add_task(schedule, chosen_task, chosen_proc);
             break;
         case TimeSchedule::extra_criteria::CR:
-            throw std::runtime_error("Not implemented");
+            chosen_proc =
+                time_schedule.GC2_CR(schedule, chosen_task, C1, C2, C3);
             break;
         case TimeSchedule::extra_criteria::BF:
-            throw std::runtime_error("Not implemented"); 
+            chosen_proc = time_schedule.GC2_BF(schedule, chosen_task, C1, C2);
             break;
         }
+        LOG_INFO << "GC2 chosen " << chosen_proc;
+        time_schedule.add_task(schedule, chosen_task, chosen_proc);
         // time_schedule.test_add_task(schedule, 4, 2);
         schedule.remove_vertex(chosen_task);
         D = schedule.get_top_vertices();
