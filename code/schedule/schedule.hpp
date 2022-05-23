@@ -31,6 +31,8 @@ class Schedule {
         int shortest_path_length;
         /** Whether this vertex is fictive */
         bool is_fictive = false;
+        /** Existent vertex */
+        bool is_existent = true;
     };
 
     /**
@@ -91,7 +93,7 @@ class Schedule {
 
     int get_number_of_edges() const;
 
-    void remove_fictive_vertices();
+    void hard_remove_fictive_vertices();
 
     std::pair<boost::graph_traits<Graph>::in_edge_iterator,
               boost::graph_traits<Graph>::in_edge_iterator>

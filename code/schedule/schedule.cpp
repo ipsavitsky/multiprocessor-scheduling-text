@@ -108,7 +108,8 @@ bool Schedule::is_direct_connection(const Schedule::Proc &proc1,
 }
 
 /**
- * @brief Initialize transmittion matrices. Fill in connections with through third processors
+ * @brief Initialize transmittion matrices. Fill in connections with through
+ * third processors
  *
  * @param tran Transmittion matrix `D`
  */
@@ -158,7 +159,7 @@ Schedule::Schedule(Schedule::edge_it edge_iterator_start,
 
 /**
  * @brief Copy constructor of Schedule
- * 
+ *
  * @param schedule The other schedule
  */
 Schedule::Schedule(const Schedule &schedule) {
@@ -172,27 +173,39 @@ Schedule::Schedule(const Schedule &schedule) {
 }
 
 /**
- * @brief Get all vertices that have no parent nodes, which means that they are ready to be added to the schedule
- * 
- * @return std::vector<Schedule::Task> 
+ * @brief Get all vertices that have no parent nodes, which means that they are
+ * ready to be added to the schedule
+ *
+ * @return std::vector<Schedule::Task>
  */
 std::vector<Schedule::Task> Schedule::get_top_vertices() {
     std::vector<Schedule::Task> top_vertices;
     for (Schedule::Task task = 0; task < task_num; ++task) {
-        if (boost::in_degree(task, graph) == 0) {
-            top_vertices.push_back(task);
+        bool has_real_parents = false;
+        for (auto edges = boost::in_edges(task, graph);
+             edges.first != edges.second; ++edges.first) {
+            auto src = boost::source(*edges.first, graph);
+            if (graph[src].is_existent == true) {
+                has_real_parents = true;
+                break;
+            }
         }
+        if (!has_real_parents && graph[task].is_existent == true)
+            top_vertices.push_back(task);
+        // if (boost::in_degree(task, graph) == 0) {
+        //     top_vertices.push_back(task);
+        // }
     }
     return top_vertices;
 }
 
 /**
  * @brief Create a fictive node
- * 
+ *
  * @param D Nodes that have to be child nodes of a fictive node
  */
 void Schedule::create_fictive_node(std::vector<Task> D) {
-    auto new_vert = add_vertex({0, true}, graph);
+    auto new_vert = add_vertex({0, true, true}, graph);
     std::for_each(D.begin(), D.end(), [&](Task task) {
         LOG_DEBUG << "Adding edge from " << new_vert << " to " << task;
         add_edge(new_vert, task, {0}, graph);
@@ -202,11 +215,12 @@ void Schedule::create_fictive_node(std::vector<Task> D) {
 
 /**
  * @brief Calculate critical paths
- * 
+ *
  * This functions does several things:
- *  1. For each edge set its property to minimum execution time of the source task on any processor
+ *  1. For each edge set its property to minimum execution time of the source
+ * task on any processor
  *  2. Run Dijkstra's algorithm on the graph to calculate critical paths
- * 
+ *
  * @todo change `std::numeric_limits<int>::max()` to something more reasonable
  * @todo change calculating minimum to matrix-aware code
  */
@@ -240,9 +254,9 @@ void Schedule::set_up_critical_paths() {
 
 /**
  * @brief Remove all fictive vertices from graph
- * 
+ *
  */
-void Schedule::remove_fictive_vertices() {
+void Schedule::hard_remove_fictive_vertices() {
     for (Task task = 0; task < task_num; ++task) {
         if (graph[task].is_fictive) {
             LOG_DEBUG << "removing fictive node " << task;
@@ -253,22 +267,24 @@ void Schedule::remove_fictive_vertices() {
 
 /**
  * @brief Remove a vertex from the graph
- * 
- * @param task 
+ *
+ * @param task
  */
 void Schedule::remove_vertex(const Task &task) {
-    boost::clear_vertex(task, graph);
-    boost::remove_vertex(task, graph);
-    --task_num;
+    graph[task].is_existent = false;
+    // boost::clear_vertex(task, graph);
+    // boost::remove_vertex(task, graph);
+    // --task_num;
 }
 
 /**
  * @brief Calculate GC1(greedy criteria 1)
- * 
- * Greedy criteria 1 is chooses the task from \f$ D \f$ that has the highest `out_degree` 
- * 
+ *
+ * Greedy criteria 1 is chooses the task from \f$ D \f$ that has the highest
+ * `out_degree`
+ *
  * @param D \f$ D \f$ set calculated by `get_top_vertices()`
- * @return Schedule::Task 
+ * @return Schedule::Task
  */
 Schedule::Task Schedule::GC1(std::vector<Task> D) {
     return *std::max_element(D.begin(), D.end(), [&](Task task1, Task task2) {
@@ -278,11 +294,11 @@ Schedule::Task Schedule::GC1(std::vector<Task> D) {
 }
 
 /**
- * @brief Get all edges that have the set task as target 
- * 
+ * @brief Get all edges that have the set task as target
+ *
  * @param task Task to get edges for
  * @return std::pair<boost::graph_traits<Schedule::Graph>::in_edge_iterator,
- * boost::graph_traits<Schedule::Graph>::in_edge_iterator> 
+ * boost::graph_traits<Schedule::Graph>::in_edge_iterator>
  */
 std::pair<boost::graph_traits<Schedule::Graph>::in_edge_iterator,
           boost::graph_traits<Schedule::Graph>::in_edge_iterator>
@@ -293,7 +309,7 @@ Schedule::get_in_edges(const Task &task) const {
 /**
  * @brief Get the whole underlying graph
  * @todo Remove in future versions
- * 
- * @return Schedule::Graph 
+ *
+ * @return Schedule::Graph
  */
 Schedule::Graph Schedule::get_graph() const { return graph; }

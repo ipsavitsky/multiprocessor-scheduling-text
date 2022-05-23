@@ -64,7 +64,7 @@ int main() {
 
     LOG_INFO << "Calculated critical paths";
 
-    schedule.remove_fictive_vertices();
+    schedule.hard_remove_fictive_vertices();
 
     schedule.print_graph();
 
