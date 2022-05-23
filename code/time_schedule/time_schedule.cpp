@@ -3,10 +3,6 @@
 
 TimeSchedule::TimeSchedule(size_t proc_num) {
     proc_array.resize(proc_num);
-    // for (auto &proc : proc_array) {
-    //     // TODO change this of course
-    //     proc.reserve(1);
-    // }
 }
 
 /**
@@ -83,8 +79,7 @@ int TimeSchedule::test_add_task(Schedule sched, const Schedule::Task &task,
 Schedule::Proc TimeSchedule::GC2(Schedule sched, Schedule::Task task) {
     std::vector<std::pair<Schedule::Proc, int>> times;
     for (int i = 0; i < proc_array.size(); i++) {
-        times.push_back(
-            {i, test_add_task(sched, task, i)});
+        times.push_back({i, test_add_task(sched, task, i)});
     }
     auto best_proc = std::min_element(
         times.begin(), times.end(),
@@ -111,4 +106,6 @@ double TimeSchedule::calculate_CR(Schedule sched) const {
     return amount_of_transitions / boost::num_edges(sched.get_graph());
 }
 
-double TimeSchedule::calculate_CR2() const {}
+double TimeSchedule::calculate_CR2() const {
+    throw std::runtime_error("Not implemented");
+}

@@ -38,9 +38,6 @@ Schedule input_schedule(std::ifstream &input) {
 }
 
 int main(int argc, char *argv[]) {
-    logger::init();
-
-    LOG_INFO << "Starting";
 
     boost::program_options::options_description desc("General options");
     std::string str_criteria;
@@ -62,6 +59,11 @@ int main(int argc, char *argv[]) {
         std::cout << desc << std::endl;
         return 0;
     }
+
+    logger::debug = false;
+    logger::init();
+
+    LOG_INFO << "Starting";
 
     TimeSchedule::extra_criteria criteria;
     if (str_criteria == "NO") {
@@ -101,7 +103,7 @@ int main(int argc, char *argv[]) {
 
     schedule.hard_remove_fictive_vertices();
 
-    schedule.print_graph();
+    // schedule.print_graph();
 
     while (!D.empty()) {
         auto chosen_task = schedule.GC1(D);
@@ -110,11 +112,14 @@ int main(int argc, char *argv[]) {
         switch (criteria) {
         case TimeSchedule::extra_criteria::NO:
             chosen_proc = time_schedule.GC2(schedule, chosen_task);
+            LOG_INFO << "GC2 chosen " << chosen_proc;
             time_schedule.add_task(schedule, chosen_task, chosen_proc);
             break;
         case TimeSchedule::extra_criteria::CR:
+            throw std::runtime_error("Not implemented");
             break;
         case TimeSchedule::extra_criteria::BF:
+            throw std::runtime_error("Not implemented"); 
             break;
         }
         // time_schedule.test_add_task(schedule, 4, 2);
