@@ -22,8 +22,6 @@ int TimeSchedule::get_time() const {
  *
  * @param task The task to add
  * @param proc Processor to assign to the task
- * @param start Start of the task
- * @param finish End of the task
  */
 void TimeSchedule::add_task(const Schedule &sched, const Schedule::Task &task,
                             const Schedule::Proc &proc) {
@@ -31,6 +29,15 @@ void TimeSchedule::add_task(const Schedule &sched, const Schedule::Task &task,
     PlacedTask placed_task{task, x, x + sched.get_task_time(proc, task)};
     proc_array[proc].push_back(placed_task);
     fast_mapping[task] = proc;
+    for (auto it = sched.get_in_edges(task); it.first != it.second;
+         ++it.first) {
+        auto from = boost::source(*it.first, sched.get_graph());
+        if (fast_mapping[from] != proc) {
+            ++amount_of_transitions;
+            if (!sched.is_direct_connection(from, proc))
+                ++amount_of_indirect_transitions;
+        }
+    }
 }
 
 /**
@@ -43,7 +50,8 @@ void TimeSchedule::add_task(const Schedule &sched, const Schedule::Task &task,
  * @param proc Processor to assign to the task
  * @return int
  */
-int TimeSchedule::test_add_task(Schedule sched, const Schedule::Task &task,
+int TimeSchedule::test_add_task(const Schedule &sched,
+                                const Schedule::Task &task,
                                 const Schedule::Proc &proc) {
     std::vector<int> times;
     for (auto it = sched.get_in_edges(task); it.first != it.second;
@@ -74,7 +82,7 @@ int TimeSchedule::test_add_task(Schedule sched, const Schedule::Task &task,
     return std::max(first_available_dependencies, first_available_processor);
 }
 
-Schedule::Proc TimeSchedule::GC2(Schedule sched, Schedule::Task task) {
+Schedule::Proc TimeSchedule::GC2(const Schedule &sched, Schedule::Task task) {
     std::vector<std::pair<Schedule::Proc, int>> times;
     for (int i = 0; i < proc_array.size(); i++) {
         times.push_back({i, test_add_task(sched, task, i)});
@@ -85,12 +93,22 @@ Schedule::Proc TimeSchedule::GC2(Schedule sched, Schedule::Task task) {
     return best_proc->first;
 }
 
-Schedule::Proc TimeSchedule::GC2_CR(Schedule sched, Schedule::Task task,
+Schedule::Proc TimeSchedule::GC2_CR(const Schedule &sched, Schedule::Task task,
                                     double C1, double C2, double C3) {
-    throw std::runtime_error("Not implemented");
+    std::vector<std::pair<Schedule::Proc, int>> times;
+    for (int i = 0; i < proc_array.size(); i++) {
+        LOG_DEBUG << C1 * test_add_task(sched, task, i) << " "
+                  << C2 * CR_with_task(sched, task, i);
+        times.push_back({i, C1 * test_add_task(sched, task, i) +
+                                C2 * CR_with_task(sched, task, i)});
+    }
+    return std::min_element(
+               times.begin(), times.end(),
+               [](const auto &a, const auto &b) { return a.second < b.second; })
+        ->first;
 }
 
-Schedule::Proc TimeSchedule::GC2_BF(Schedule sched, Schedule::Task task,
+Schedule::Proc TimeSchedule::GC2_BF(const Schedule &sched, Schedule::Task task,
                                     double C1, double C2) {
     std::vector<std::pair<Schedule::Proc, int>> times;
     for (int i = 0; i < proc_array.size(); i++) {
@@ -103,7 +121,14 @@ Schedule::Proc TimeSchedule::GC2_BF(Schedule sched, Schedule::Task task,
         ->first;
 }
 
-double TimeSchedule::BF_with_task(Schedule sched, Schedule::Task task,
+double TimeSchedule::CR_with_task(const Schedule &sched, Schedule::Task task,
+                                  Schedule::Proc proc) {
+    TimeSchedule copy(*this);
+    copy.add_task(sched, task, proc);
+    return copy.calculate_CR(sched);
+}
+
+double TimeSchedule::BF_with_task(const Schedule &sched, Schedule::Task task,
                                   Schedule::Proc proc) {
     TimeSchedule copy(*this);
     copy.add_task(sched, task, proc);
@@ -125,10 +150,12 @@ double TimeSchedule::calculate_BF() const {
     return std::ceil(BF);
 }
 
-double TimeSchedule::calculate_CR(Schedule sched) const {
+double TimeSchedule::calculate_CR(const Schedule &sched) const {
+    LOG_DEBUG << amount_of_transitions << " "
+              << boost::num_edges(sched.get_graph());
     return amount_of_transitions / boost::num_edges(sched.get_graph());
 }
 
-double TimeSchedule::calculate_CR2() const {
-    throw std::runtime_error("Not implemented");
+double TimeSchedule::calculate_CR2(const Schedule &sched) const {
+    return amount_of_indirect_transitions / boost::num_edges(sched.get_graph());
 }

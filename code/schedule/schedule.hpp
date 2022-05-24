@@ -89,7 +89,7 @@ class Schedule {
     int get_in_degree(const Task &task) const;
 
     // TODO: REMOVE THIS IN THE FUTURE
-    Graph get_graph() const;
+    const Graph &get_graph() const;
 
     int get_number_of_edges() const;
 

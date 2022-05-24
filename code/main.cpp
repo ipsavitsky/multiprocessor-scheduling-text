@@ -105,9 +105,6 @@ int main(int argc, char *argv[]) {
 
     // schedule.print_graph();
 
-    double C1 = 0.1;
-    double C2 = 0.1;
-    double C3 = 0.1;
 
     while (!D.empty()) {
         auto chosen_task = schedule.GC1(D);
@@ -119,10 +116,10 @@ int main(int argc, char *argv[]) {
             break;
         case TimeSchedule::extra_criteria::CR:
             chosen_proc =
-                time_schedule.GC2_CR(schedule, chosen_task, C1, C2, C3);
+                time_schedule.GC2_CR(schedule, chosen_task, 1, 1, 0.5);
             break;
         case TimeSchedule::extra_criteria::BF:
-            chosen_proc = time_schedule.GC2_BF(schedule, chosen_task, C1, C2);
+            chosen_proc = time_schedule.GC2_BF(schedule, chosen_task, 1, 0.7);
             break;
         }
         LOG_INFO << "GC2 chosen " << chosen_proc;

@@ -1,5 +1,7 @@
 \documentclass[12pt]{article}
 
+% \usepackage{identfirst}
+
 \usepackage[utf8]{inputenc}
 \usepackage[T2A]{fontenc}
 \usepackage[russian]{babel}
@@ -15,8 +17,8 @@
 
 \usepackage[
 backend=biber,
-style=numeric,
-sorting=ynt
+style=gost-numeric,
+% sorting=ynt
 ]{biblatex}
 
 \usepackage{tikzit}
@@ -102,6 +104,6 @@ sorting=ynt
 \appendix
 
 \newpage
-\intro{Классы входных данных}
+\intro{Классы входных данных} \label{sec:input-classes}
 \input{pages/appendix/01input-classes.tex}
 \end{document}

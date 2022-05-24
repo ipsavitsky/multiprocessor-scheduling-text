@@ -312,4 +312,4 @@ Schedule::get_in_edges(const Task &task) const {
  *
  * @return Schedule::Graph
  */
-Schedule::Graph Schedule::get_graph() const { return graph; }
+const Schedule::Graph &Schedule::get_graph() const { return graph; }

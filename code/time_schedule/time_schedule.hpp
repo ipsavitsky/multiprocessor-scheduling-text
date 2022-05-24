@@ -22,11 +22,8 @@ class TimeSchedule {
     std::vector<proc_info> proc_array;
 
     std::map<Schedule::Task, Schedule::Proc> fast_mapping;
-    /**
-     * @todo add control of amount of transitions
-     *
-     */
-    std::size_t amount_of_transitions;
+    std::size_t amount_of_transitions = 0;
+    std::size_t amount_of_indirect_transitions = 0;
 
   public:
     /**
@@ -43,17 +40,19 @@ class TimeSchedule {
     int get_time() const;
     void add_task(const Schedule &sched, const Schedule::Task &task,
                   const Schedule::Proc &proc);
-    int test_add_task(Schedule sched, const Schedule::Task &task,
+    int test_add_task(const Schedule &sched, const Schedule::Task &task,
                       const Schedule::Proc &proc);
-    Schedule::Proc GC2(Schedule sched, Schedule::Task task);
-    Schedule::Proc GC2_BF(Schedule sched, Schedule::Task task, double C1,
+    Schedule::Proc GC2(const Schedule &sched, Schedule::Task task);
+    Schedule::Proc GC2_BF(const Schedule &sched, Schedule::Task task, double C1,
                           double C2);
-    Schedule::Proc GC2_CR(Schedule sched, Schedule::Task task, double C1,
+    Schedule::Proc GC2_CR(const Schedule &sched, Schedule::Task task, double C1,
                           double C2, double C3);
     double calculate_BF() const;
-    double BF_with_task(Schedule sched, Schedule::Task task,
+    double BF_with_task(const Schedule &sched, Schedule::Task task,
                         Schedule::Proc proc);
-    double calculate_CR(Schedule sched) const;
+    double CR_with_task(const Schedule &sched, Schedule::Task task,
+                               Schedule::Proc proc);
+    double calculate_CR(const Schedule &sched) const;
     double calculate_CR2() const;
 };
 
