@@ -21,13 +21,13 @@
     \end{enumerate}
 \end{frame}
 
-\subsection{Схема}
-\begin{frame}
-    \frametitle{Общая схема алгоритма}
-    {\tiny
-        \ctikzfig{algo_schema}
-    }
-\end{frame}
+% \subsection{Схема}
+% \begin{frame}
+%     \frametitle{Общая схема алгоритма}
+%     {\tiny
+%         \ctikzfig{algo_schema}
+%     }
+% \end{frame}
 
 \subsection{Предподсчет}
 
@@ -75,10 +75,14 @@
     Способы выбора места:
     \begin{enumerate}
         \item Подсчет усредненного взвешенного показателя среди критериев \\
-              \begin{gather*}
-                  crit = C_1 \cdot GC2 + C_2 \cdot CR + C_3 \cdot BF
-              \end{gather*}
-              ,где $C_1, C_2, C_3$ - параметры алгоритма
+        \begin{gather*}
+            crit = C_1 \cdot GC2 + C_2 \cdot CR + C_3 \cdot CR2
+        \end{gather*}
+        А задачи с дополнительным ограничением на сбалансированность ограничения работ:
+        \begin{gather*}
+            crit = C_1 \cdot GC2 + C_2 \cdot BF
+        \end{gather*}
+        где $C_1$, $C_2$ и $C_3$ - параметры алгоритма. Работа размещается на место с наибольшим значением параметра $crit$.
         \item Допускная система выбора
     \end{enumerate}
 \end{frame}

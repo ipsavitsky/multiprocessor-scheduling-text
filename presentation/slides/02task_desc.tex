@@ -1,16 +1,16 @@
 \begin{frame}
     \frametitle{Постановка задачи}
     \begin{columns}
-        \begin{column}{0.6\textwidth}
+        \begin{column}{0.60\textwidth}
             Дано:
             \begin{enumerate}
                 \item Ориентированный граф работ $G$ без циклов, в котором дуги - зависимости по данным, а вершины - задания. Вершин $n$, дуг $m$
                 \item Вычислительная система, состоящая из $p$ различных процессоров
-                \item Матрица $C_{ij}$ длительности выполнения работ на процессорах, $i=1 \dots n, j=1 \dots p$
-                \item Матрица $D_{kl}$ передач данных между процессорами, $k=1 \dots p, l = 1 \dots p, D_{kk} = 0$
+                \item Матрица $C_{ij}$ длительности выполнения работ на процессорах, $i=1 \dots n, j=1 \dots p$. Каждая строка этой матрицы - длины выполнения $n$-й задачи на $p$ процессорах. 
+                \item Матрица $D_{kl}$ передач данных между процессорами, $k=1 \dots p, l = 1 \dots p, D_{kk} = 0$. $D_{ij}$-й элемент этой матрицы - время пеердачи данных между процессорами $i$ и $j$.
             \end{enumerate}
         \end{column}
-        \begin{column}{0.4\textwidth}
+        \begin{column}{0.40\textwidth}
             \begin{figure}
                 \ctikzfig{graph_schema}
                 \captionsetup{labelformat=empty}
@@ -48,7 +48,7 @@
 \begin{frame}
     \frametitle{Постановка задачи}
     \begin{columns}
-        \begin{column}{0.6\textwidth}
+        \begin{column}{0.7\textwidth}
             Требуется:
             \begin{enumerate}
                 \item Построить расписание $HP$, то есть для $i$-й работы определить время начала ее выполнения $s_i$ и процессор $p_i$ на которм она будет выполняться
@@ -56,7 +56,7 @@
                 \item Дополнительные ограничения
             \end{enumerate}
         \end{column}
-        \begin{column}{0.4\textwidth}
+        \begin{column}{0.3\textwidth}
             \begin{figure}
                 \tiny
                 \ctikzfig{figures/schedule-time-diagram}
