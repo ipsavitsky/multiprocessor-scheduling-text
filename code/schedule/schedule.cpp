@@ -98,8 +98,6 @@ int Schedule::get_number_of_edges() const { return edges; }
  * @param proc1 Source processor
  * @param proc2 Destination processor
  *
- * @bug Does not work correctly :)
- *
  * @return `true` if direct connection
  * @return `false` if connected through third processor
  */
@@ -140,9 +138,8 @@ void Schedule::init_transmition_matrices(
  * @brief Construct a new Schedule object
  *
  * @param edge_vec Start of edge iterator
- * @param edge_iterator_end End of edge iterator
- * @param task_times Task completion matrix `C`
- * @param tran_times Transmittion matrix `D`
+ * @param task_times Task completion matrix \f$ C \f$
+ * @param tran_times Transmittion matrix \f$ D \f$
  */
 Schedule::Schedule(std::vector<Edge> &edge_vec,
                    boost::numeric::ublas::matrix<int> &task_times,

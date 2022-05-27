@@ -6,6 +6,10 @@ boost::log::sources::severity_logger<boost::log::trivial::severity_level> log;
 bool verbose = true;
 bool debug = true;
 
+/**
+ * @brief A function to initialize the logger. Takes in namespace parameters `verbose` and `debug`
+ * 
+ */
 void init() {
     boost::log::add_common_attributes();
 

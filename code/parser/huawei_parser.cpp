@@ -7,6 +7,17 @@
 #include <filesystem>
 #include <fstream>
 
+/**
+ * @brief Generate a schedule from a file in Huawei format
+ * 
+ * This function expects that the provided directory contains
+ * 1. `<directory_name>.txt`, 
+ * 2. `<directory_name>_dly.txt`,
+ * 3. `<directory_name>_com.txt`
+ * 
+ * @param path Path to the directory
+ * @return Schedule 
+ */
 Schedule new_schedule(std::string path) {
     std::filesystem::path p(path);
     if (!std::filesystem::exists(p)) {

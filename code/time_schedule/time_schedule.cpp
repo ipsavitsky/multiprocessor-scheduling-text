@@ -2,25 +2,35 @@
 
 #include <algorithm>
 
-TimeSchedule::TimeSchedule(size_t proc_num) { proc_array.resize(proc_num); }
+/**
+ * @brief Construct a new Time Schedule:: Time Schedule object
+ * 
+ * @param proc_num Amount of processors in the schedule
+ */
+TimeSchedule::TimeSchedule(std::size_t proc_num) {
+    proc_array.resize(proc_num);
+}
 
 /**
- * @brief Get the time it takes the schedule to execute
- *
- * @return int
+ * @brief Calculate the time it takes to execute the schedule
+ * 
+ * @return int 
  */
 int TimeSchedule::get_time() const {
-    std::vector<int> task_time;
-    std::for_each(proc_array.begin(), proc_array.end(),
-                  [&task_time](const proc_info &proc) {
-                      task_time.push_back(proc.back().finish);
-                  });
-    return *std::max_element(task_time.begin(), task_time.end());
+    return std::max_element(proc_array.begin(), proc_array.end(),
+                            [](const proc_info &a, const proc_info &b) {
+                                return a.back().finish < b.back().finish;
+                            })
+        ->back()
+        .finish;
 }
 
 /**
  * @brief Add a task to the schedule
  *
+ * @todo check if test_add_task is needed
+ * 
+ * @param sched Schedule with all dependencies
  * @param task The task to add
  * @param proc Processor to assign to the task
  */
@@ -43,17 +53,15 @@ void TimeSchedule::add_task(const Schedule &sched, const Schedule::Task &task,
 
 /**
  * @brief Test if a task can be added to the schedule
- *
- * @todo Not finished
- *
+ * 
  * @param sched Schedule with all dependencies
  * @param task Task to add
  * @param proc Processor to assign to the task
  * @return int
  */
-int TimeSchedule::test_add_task(const Schedule &sched,
-                                const Schedule::Task &task,
-                                const Schedule::Proc &proc) {
+std::size_t TimeSchedule::test_add_task(const Schedule &sched,
+                                        const Schedule::Task &task,
+                                        const Schedule::Proc &proc) {
     std::vector<int> times;
     for (auto it = sched.get_in_edges(task); it.first != it.second;
          ++it.first) {
@@ -84,6 +92,13 @@ int TimeSchedule::test_add_task(const Schedule &sched,
     return std::max(first_available_dependencies, first_available_processor);
 }
 
+/**
+ * @brief Calculate the GC2 score of the schedule
+ * 
+ * @param sched Schedule with all dependencies
+ * @param task 
+ * @return Schedule::Proc 
+ */
 Schedule::Proc TimeSchedule::GC2(const Schedule &sched, Schedule::Task task) {
     std::vector<std::pair<Schedule::Proc, int>> times;
     for (int i = 0; i < proc_array.size(); i++) {
@@ -95,6 +110,16 @@ Schedule::Proc TimeSchedule::GC2(const Schedule &sched, Schedule::Task task) {
     return best_proc->first;
 }
 
+/**
+ * @brief Calculate \f$crit_{CR} \f$
+ * 
+ * \f$crit_{CR} = C_1 \cdot GC_2 + C_2 \cdot CR + C_3 \cdot CR_2\f$
+ * 
+ * @param sched Schedule with all dependencies
+ * @param task Task to find the placing of
+ * @param C1, C2, C3 Coefficients 
+ * @return Schedule::Proc 
+ */
 Schedule::Proc TimeSchedule::GC2_CR(const Schedule &sched, Schedule::Task task,
                                     double C1, double C2, double C3) {
     std::vector<std::pair<Schedule::Proc, int>> times;
@@ -110,6 +135,16 @@ Schedule::Proc TimeSchedule::GC2_CR(const Schedule &sched, Schedule::Task task,
         ->first;
 }
 
+/**
+ * @brief Calculate \f$crit_{BF} \f$
+ * 
+ * \f$crit_{CR} = C_1 \cdot GC_2 + C_2 \cdot BF \f$
+ * 
+ * @param sched Schedule with all dependencies
+ * @param task Task to find the placing of
+ * @param C1, C2 Coefficients
+ * @return Schedule::Proc 
+ */
 Schedule::Proc TimeSchedule::GC2_BF(const Schedule &sched, Schedule::Task task,
                                     double C1, double C2) {
     std::vector<std::pair<Schedule::Proc, int>> times;
@@ -124,19 +159,24 @@ Schedule::Proc TimeSchedule::GC2_BF(const Schedule &sched, Schedule::Task task,
 }
 
 double TimeSchedule::CR_with_task(const Schedule &sched, Schedule::Task task,
-                                  Schedule::Proc proc) {
+                                  Schedule::Proc proc) const {
     TimeSchedule copy(*this);
     copy.add_task(sched, task, proc);
     return copy.calculate_CR(sched);
 }
 
 double TimeSchedule::BF_with_task(const Schedule &sched, Schedule::Task task,
-                                  Schedule::Proc proc) {
+                                  Schedule::Proc proc) const {
     TimeSchedule copy(*this);
     copy.add_task(sched, task, proc);
     return copy.calculate_BF();
 }
 
+/**
+ * @brief Calculate `BF` of current schedule
+ * 
+ * @return double 
+ */
 double TimeSchedule::calculate_BF() const {
     auto max_tasks =
         std::max_element(proc_array.begin(), proc_array.end(),
@@ -152,12 +192,25 @@ double TimeSchedule::calculate_BF() const {
     return std::ceil(BF);
 }
 
+
+/**
+ * @brief Calculate `CR` of current schedule
+ * 
+ * @param sched Schedule with all dependencies
+ * @return double 
+ */
 double TimeSchedule::calculate_CR(const Schedule &sched) const {
     LOG_DEBUG << amount_of_transitions << " "
               << boost::num_edges(sched.get_graph());
     return amount_of_transitions / boost::num_edges(sched.get_graph());
 }
 
+/**
+ * @brief Calculate `CR2` of current schedule
+ * 
+ * @param sched Schedule with all dependencies
+ * @return double 
+ */
 double TimeSchedule::calculate_CR2(const Schedule &sched) const {
     return amount_of_indirect_transitions / boost::num_edges(sched.get_graph());
 }

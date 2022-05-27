@@ -1,3 +1,13 @@
+/**
+ * @file schedule.hpp
+ * @author Ilya Savitsky (ipsavitsky234@gmail.com)
+ * @brief 
+ * @version 0.1
+ * @date 2022-05-28
+ * 
+ * @copyright Copyright (c) 2022
+ * 
+ */
 #ifndef SCHEDULE_HPP
 #define SCHEDULE_HPP
 
@@ -20,6 +30,10 @@ class Schedule {
      */
     using Proc = std::size_t;
 
+    /**
+     * @brief Edge type used to represent a task dependency. Only contains a dependency, no correlation with graph.
+     * 
+     */
     using Edge = std::pair<Proc, Proc>;
 
     /**

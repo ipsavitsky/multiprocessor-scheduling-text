@@ -65,8 +65,6 @@ int main(int argc, char *argv[]) {
 
     schedule.hard_remove_fictive_vertices();
 
-    // schedule.print_graph();
-
     while (!D.empty()) {
         auto chosen_task = schedule.GC1(D);
         LOG_INFO << "GC1 chosen " << chosen_task;
@@ -89,6 +87,6 @@ int main(int argc, char *argv[]) {
         schedule.remove_vertex(chosen_task);
         D = schedule.get_top_vertices();
     }
-    LOG_INFO << "final time is " << time_schedule.get_time();
+    LOG_INFO << "time:\t" << time_schedule.get_time();
     return 0;
 }
