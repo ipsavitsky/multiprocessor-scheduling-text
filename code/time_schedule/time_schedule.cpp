@@ -35,8 +35,8 @@ void TimeSchedule::add_task(const Schedule &sched, const Schedule::Task &task,
         auto from = boost::source(*it.first, sched.get_graph());
         if (fast_mapping[from] != proc) {
             ++amount_of_transitions;
-            // if (!sched.is_direct_connection(from, proc))
-            //     ++amount_of_indirect_transitions;
+            if (!sched.is_direct_connection(fast_mapping[from], proc))
+                ++amount_of_indirect_transitions;
         }
     }
 }

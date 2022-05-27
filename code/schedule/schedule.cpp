@@ -36,7 +36,6 @@ void Schedule::print_graph() const {
  * @return Time to transfer data from `from` to `to`
  */
 int Schedule::get_tran_time(const Proc &from, const Proc &to) const {
-    // TODO: unlinked processors
     return tran_times(from, to);
 }
 
