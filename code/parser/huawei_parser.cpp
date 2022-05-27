@@ -1,7 +1,9 @@
 #include "huawei_parser.hpp"
 #include "../logging/boost_logger.hpp"
+
 #include <boost/numeric/ublas/io.hpp>
 #include <boost/numeric/ublas/matrix.hpp>
+
 #include <filesystem>
 #include <fstream>
 
@@ -29,7 +31,7 @@ Schedule new_schedule(std::string path) {
     std::size_t proc_num = 0;
     std::size_t edge_num = 0;
 
-    std::vector<std::pair<int, int>> edges;
+    std::vector<Schedule::Edge> edges;
     boost::numeric::ublas::matrix<int> task_time;
     boost::numeric::ublas::matrix<int> tran_time;
 
@@ -69,7 +71,7 @@ Schedule new_schedule(std::string path) {
         std::ifstream com_stream(p / com);
         task_time.resize(proc_num, task_num);
         int tmp;
-        for(int i = 0; i < task_num; ++i) {
+        for (int i = 0; i < task_num; ++i) {
             com_stream >> tmp;
             for (int j = 0; j < proc_num; ++j) {
                 task_time(j, i) = tmp;
@@ -79,5 +81,5 @@ Schedule new_schedule(std::string path) {
         LOG_DEBUG << task_time;
     }
 
-    return Schedule(edges.begin(), edges.end(), task_time, tran_time);
+    return Schedule(edges, task_time, tran_time);
 }

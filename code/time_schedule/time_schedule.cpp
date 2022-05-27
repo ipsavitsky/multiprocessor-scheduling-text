@@ -1,4 +1,5 @@
 #include "time_schedule.hpp"
+
 #include <algorithm>
 
 TimeSchedule::TimeSchedule(size_t proc_num) { proc_array.resize(proc_num); }

@@ -1,10 +1,12 @@
 #include "schedule.hpp"
 #include "../logging/boost_logger.hpp"
-#include <algorithm>
+
 #include <boost/graph/dijkstra_shortest_paths.hpp>
 #include <boost/graph/graph_traits.hpp>
 #include <boost/graph/topological_sort.hpp>
 #include <boost/property_map/property_map.hpp>
+
+#include <algorithm>
 #include <iostream>
 #include <set>
 
@@ -138,19 +140,17 @@ void Schedule::init_transmition_matrices(
 /**
  * @brief Construct a new Schedule object
  *
- * @param edge_iterator_start Start of edge iterator
+ * @param edge_vec Start of edge iterator
  * @param edge_iterator_end End of edge iterator
- * @param task_num Amount of tasks
- * @param proc_num Amount of processors
  * @param task_times Task completion matrix `C`
  * @param tran_times Transmittion matrix `D`
  */
-Schedule::Schedule(Schedule::edge_it edge_iterator_start,
-                   Schedule::edge_it edge_iterator_end, boost::numeric::ublas::matrix<int> &task_times,
+Schedule::Schedule(std::vector<Edge> &edge_vec,
+                   boost::numeric::ublas::matrix<int> &task_times,
                    boost::numeric::ublas::matrix<int> &tran_times) {
     this->task_num = task_times.size2();
     this->proc_num = tran_times.size1();
-    graph = Graph(edge_iterator_start, edge_iterator_end, task_num);
+    graph = Graph(edge_vec.begin(), edge_vec.end(), task_num);
     edges = boost::num_edges(graph);
     this->task_times = task_times;
     init_transmition_matrices(tran_times);

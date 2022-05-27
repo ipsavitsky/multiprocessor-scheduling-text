@@ -3,7 +3,7 @@
 
 #include "../logging/boost_logger.hpp"
 #include "../schedule/schedule.hpp"
-#include <boost/numeric/ublas/io.hpp>
+
 #include <boost/numeric/ublas/matrix.hpp>
 #include <map>
 

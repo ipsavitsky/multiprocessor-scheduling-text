@@ -3,6 +3,7 @@
 
 #include <boost/graph/adjacency_list.hpp>
 #include <boost/numeric/ublas/matrix.hpp>
+
 #include <vector>
 
 /**
@@ -17,7 +18,9 @@ class Schedule {
      * @brief Type used to represent a processor
      *
      */
-    using Proc = size_t;
+    using Proc = std::size_t;
+
+    using Edge = std::pair<Proc, Proc>;
 
     /**
      * @brief Internal type used to represent data in a vertex
@@ -107,7 +110,7 @@ class Schedule {
 
     Schedule() = default;
 
-    Schedule(edge_it edge_iterator_start, edge_it edge_iterator_end,
+    Schedule(std::vector<Edge> &edge_vec,
              boost::numeric::ublas::matrix<int> &task_times,
              boost::numeric::ublas::matrix<int> &tran_times);
 
