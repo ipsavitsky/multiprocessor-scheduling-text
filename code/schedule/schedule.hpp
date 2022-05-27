@@ -102,7 +102,7 @@ class Schedule {
     void remove_vertex(const Task &task);
 
     bool is_direct_connection(const Schedule::Proc &proc1,
-                              const Schedule::Proc &proc2);
+                              const Schedule::Proc &proc2) const;
 
     void init_transmition_matrices(boost::numeric::ublas::matrix<int> tran);
 

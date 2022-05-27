@@ -53,7 +53,7 @@ class TimeSchedule {
     double CR_with_task(const Schedule &sched, Schedule::Task task,
                                Schedule::Proc proc);
     double calculate_CR(const Schedule &sched) const;
-    double calculate_CR2() const;
+    double calculate_CR2(const Schedule &sched) const;
 };
 
 #endif

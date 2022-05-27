@@ -60,7 +60,7 @@ int main(int argc, char *argv[]) {
         return 0;
     }
 
-    logger::debug = false;
+    logger::debug = true;
     logger::init();
 
     LOG_INFO << "Starting";

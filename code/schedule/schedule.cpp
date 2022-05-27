@@ -103,7 +103,7 @@ int Schedule::get_number_of_edges() const { return edges; }
  * @return `false` if connected through third processor
  */
 bool Schedule::is_direct_connection(const Schedule::Proc &proc1,
-                                    const Schedule::Proc &proc2) {
+                                    const Schedule::Proc &proc2) const {
     return long_transmition(proc1, proc2) == -1;
 }
 
