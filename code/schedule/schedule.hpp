@@ -1,11 +1,8 @@
 #ifndef SCHEDULE_HPP
 #define SCHEDULE_HPP
 
-#include <algorithm>
 #include <boost/graph/adjacency_list.hpp>
 #include <boost/numeric/ublas/matrix.hpp>
-#include <iostream>
-#include <map>
 #include <vector>
 
 /**
@@ -60,8 +57,8 @@ class Schedule {
 
   private:
     using edge_it = std::vector<std::pair<int, int>>::iterator;
-    int task_num;
-    int proc_num;
+    int task_num{0};
+    int proc_num{0};
     int edges{0};
 
     Graph graph;
@@ -74,7 +71,7 @@ class Schedule {
     boost::numeric::ublas::matrix<int> long_transmition;
 
   public:
-    void print_graph();
+    void print_graph() const;
 
     int get_task_num() const;
 
@@ -111,7 +108,6 @@ class Schedule {
     Schedule() = default;
 
     Schedule(edge_it edge_iterator_start, edge_it edge_iterator_end,
-             int task_num, int proc_num,
              boost::numeric::ublas::matrix<int> &task_times,
              boost::numeric::ublas::matrix<int> &tran_times);
 

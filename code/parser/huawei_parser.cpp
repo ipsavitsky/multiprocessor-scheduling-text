@@ -79,5 +79,5 @@ Schedule new_schedule(std::string path) {
         LOG_DEBUG << task_time;
     }
 
-    return Schedule(edges.begin(), edges.end(), task_num, proc_num, task_time, tran_time);
+    return Schedule(edges.begin(), edges.end(), task_time, tran_time);
 }

@@ -78,17 +78,6 @@ int main(int argc, char *argv[]) {
         return 1;
     }
 
-    // std::ifstream input;
-    // LOG_INFO << "Opening file " << filename;
-    // input.open(filename);
-    // if (!input.is_open()) {
-    //     LOG_ERROR << "Can't open file " << filename;
-    //     return 1;
-    // }
-
-    // Schedule schedule = input_schedule(input);
-    // input.close();
-
     Schedule schedule = new_schedule(filename);
 
     TimeSchedule time_schedule(schedule.get_proc_num());

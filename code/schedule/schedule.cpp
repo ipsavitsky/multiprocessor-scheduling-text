@@ -1,19 +1,17 @@
 #include "schedule.hpp"
 #include "../logging/boost_logger.hpp"
 #include <algorithm>
-#include <boost/graph/adjacency_list.hpp>
 #include <boost/graph/dijkstra_shortest_paths.hpp>
 #include <boost/graph/graph_traits.hpp>
 #include <boost/graph/topological_sort.hpp>
 #include <boost/property_map/property_map.hpp>
 #include <iostream>
 #include <set>
-#include <vector>
 
 /**
  * @brief Output graph to stdout
  */
-void Schedule::print_graph() {
+void Schedule::print_graph() const {
     auto fictiveness = get(&VertexData::is_fictive, graph);
     auto sh_path = get(&VertexData::shortest_path_length, graph);
     for (Task curr_task = 0; curr_task < task_num; ++curr_task) {
@@ -33,7 +31,6 @@ void Schedule::print_graph() {
  *
  * @param from Source processor
  * @param to Destination processor
- * @todo Code in time between unlinked processors
  * @return Time to transfer data from `from` to `to`
  */
 int Schedule::get_tran_time(const Proc &from, const Proc &to) const {
@@ -99,6 +96,9 @@ int Schedule::get_number_of_edges() const { return edges; }
  *
  * @param proc1 Source processor
  * @param proc2 Destination processor
+ *
+ * @bug Does not work correctly :)
+ *
  * @return `true` if direct connection
  * @return `false` if connected through third processor
  */
@@ -146,11 +146,10 @@ void Schedule::init_transmition_matrices(
  * @param tran_times Transmittion matrix `D`
  */
 Schedule::Schedule(Schedule::edge_it edge_iterator_start,
-                   Schedule::edge_it edge_iterator_end, int task_num,
-                   int proc_num, boost::numeric::ublas::matrix<int> &task_times,
+                   Schedule::edge_it edge_iterator_end, boost::numeric::ublas::matrix<int> &task_times,
                    boost::numeric::ublas::matrix<int> &tran_times) {
-    this->task_num = task_num;
-    this->proc_num = proc_num;
+    this->task_num = task_times.size2();
+    this->proc_num = tran_times.size1();
     graph = Graph(edge_iterator_start, edge_iterator_end, task_num);
     edges = boost::num_edges(graph);
     this->task_times = task_times;
@@ -192,9 +191,6 @@ std::vector<Schedule::Task> Schedule::get_top_vertices() {
         }
         if (!has_real_parents && graph[task].is_existent == true)
             top_vertices.push_back(task);
-        // if (boost::in_degree(task, graph) == 0) {
-        //     top_vertices.push_back(task);
-        // }
     }
     return top_vertices;
 }

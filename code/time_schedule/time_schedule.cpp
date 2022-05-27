@@ -57,11 +57,12 @@ int TimeSchedule::test_add_task(const Schedule &sched,
     for (auto it = sched.get_in_edges(task); it.first != it.second;
          ++it.first) {
         auto from = boost::source(*it.first, sched.get_graph());
-        LOG_DEBUG << "from: " << from << " to: " << task;
+        // debug output commented because it generates way to much output
+        // LOG_DEBUG << "from: " << from << " to: " << task;
         int trans_time = sched.get_task_time(proc, task);
         int task_time = sched.get_tran_time(fast_mapping[from], proc);
-        LOG_DEBUG << "trans_time: " << trans_time
-                  << "; tran_time: " << task_time;
+        // LOG_DEBUG << "trans_time: " << trans_time
+        //           << "; tran_time: " << task_time;
         times.push_back(trans_time + task_time);
     }
     auto first_available_dependencies =
