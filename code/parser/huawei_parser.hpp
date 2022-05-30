@@ -15,6 +15,8 @@
 
 #include <string>
 
-Schedule new_schedule(std::string path);
+Schedule input_schedule_class_1(std::string path);
+Schedule input_schedule_class_2(std::string path);
+Schedule input_schedule_regular(std::string path);
 
 #endif

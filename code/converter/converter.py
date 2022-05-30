@@ -1,3 +1,15 @@
+##
+# @file converter.py
+# @author Ilya Savitsky
+# @brief Converter of Huawei data format to regular data format. 
+# @date 2022-05-30
+# 
+# This module contains the converter from one of the Huawei data formats to the following data format:
+# {task_num} {proc_num} {edge_num}
+# {C_ij matrix, proc_num x task_num}
+# {D_ij matrix, proc_num x proc_num}
+# {Pairs of edges are separated by a space, edge_num x 2}
+
 import logging
 import argparse
 import numpy as np
@@ -69,7 +81,7 @@ elif args.class_num == 2:
     task_time = np.full((proc_num, task_num), 1, dtype=int)
 
 with open(args.output, "w") as f:
-    f.write(f"{task_num} {proc_num}\n")
+    f.write(f"{task_num} {proc_num} {edge_num}\n")
     np.savetxt(f, task_time, fmt="%d")
     np.savetxt(f, tran_time, fmt="%d")
     np.savetxt(f, edges, fmt="%d")

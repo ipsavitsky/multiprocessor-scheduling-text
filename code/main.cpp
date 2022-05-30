@@ -8,27 +8,32 @@
 #include <fstream>
 
 int main(int argc, char *argv[]) {
-
     boost::program_options::options_description desc("General options");
     std::string str_criteria;
     std::string filename;
-    desc.add_options()("help,h", "Print help")(
-        "input,i",
-        boost::program_options::value<std::string>(&filename)->default_value(
-            "../input.txt"),
-        "Input file")("criteria,c",
-                      boost::program_options::value<std::string>(&str_criteria)
-                          ->default_value("NO"),
-                      "Extra criteria for time schedule");
+    int input_class;
+    desc.add_options()           //
+        ("help,h", "Print help") //
+        ("input,i",
+         boost::program_options::value<std::string>(&filename)->required(),
+         "Input file (or directory)") //
+        ("criteria,c",
+         boost::program_options::value<std::string>(&str_criteria)
+             ->default_value("NO"),
+         "Extra criteria for time schedule (CR/BF/NO)") //
+        ("class,C",
+         boost::program_options::value<int>(&input_class)->required(),
+         "Class of input file (0/1/2)");
     boost::program_options::variables_map vm;
     boost::program_options::store(
         boost::program_options::parse_command_line(argc, argv, desc), vm);
-    boost::program_options::notify(vm);
 
     if (vm.count("help")) {
         std::cout << desc << std::endl;
         return 0;
     }
+
+    boost::program_options::notify(vm);
 
     logger::debug = true;
     logger::init();
@@ -47,7 +52,21 @@ int main(int argc, char *argv[]) {
         return 1;
     }
 
-    Schedule schedule = new_schedule(filename);
+    Schedule schedule;
+    switch (input_class) {
+    case 0:
+        schedule = input_schedule_regular(filename);
+        break;
+    case 1:
+        schedule = input_schedule_class_1(filename);
+        break;
+    case 2:
+        schedule = input_schedule_class_2(filename);
+        break;
+    default:
+        LOG_ERROR << "Unknown class: " << input_class;
+        throw std::runtime_error("Unknown class");
+    }
 
     TimeSchedule time_schedule(schedule.get_proc_num());
 
@@ -67,7 +86,7 @@ int main(int argc, char *argv[]) {
 
     while (!D.empty()) {
         auto chosen_task = schedule.GC1(D);
-        LOG_INFO << "GC1 chosen " << chosen_task;
+        LOG_DEBUG << "GC1 chosen " << chosen_task;
         Schedule::Proc chosen_proc;
         switch (criteria) {
         case TimeSchedule::extra_criteria::NO:
@@ -81,7 +100,7 @@ int main(int argc, char *argv[]) {
             chosen_proc = time_schedule.GC2_BF(schedule, chosen_task, 1, 0.7);
             break;
         }
-        LOG_INFO << "GC2 chosen " << chosen_proc;
+        LOG_DEBUG << "GC2 chosen " << chosen_proc;
         time_schedule.add_task(schedule, chosen_task, chosen_proc);
         // time_schedule.test_add_task(schedule, 4, 2);
         schedule.remove_vertex(chosen_task);

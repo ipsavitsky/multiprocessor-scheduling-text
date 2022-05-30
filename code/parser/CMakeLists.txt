@@ -7,6 +7,6 @@ set(CMAKE_CXX_STANDARD 17)
 
 include_directories(../logging ../schedule)
 
-add_library(parser STATIC huawei_parser.cpp)
+add_library(parser STATIC huawei_parser.cpp parser.cpp)
 
 target_link_libraries(parser logging schedule)
