@@ -1,0 +1,51 @@
+\begin{tikzpicture}
+	\begin{pgfonlayer}{nodelayer}
+		\node [style=process] (2) at (13, 4) {Создать вершину с длиной выполнения 0};
+		\node [style=startstop] (4) at (0, 11) {Старт};
+		\node [style=decision] (5) at (0, 7) {\makecell{Есть больше одной\\``головной'' вершины?}};
+		\node [style=process] (6) at (0, 1) {Вычислить $k$};
+		\node [style=process] (7) at (0, -2) {Вычислить $D$};
+		\node [style=decision] (8) at (0, -5) {$D$ пустое?};
+		\node [style=startstop] (9) at (13, -5) {Останов};
+		\node [style=process] (10) at (0, -8) {Выбрать работу в соответствии с $GC1$};
+		\node [style=process] (11) at (0, -11) {Выбрать место в расписании в соответствии с $GC2$};
+		\node [style=process] (12) at (0, -14) {Пробное размещение работы в расписание; проверка критериев};
+		\node [style=decision] (13) at (0, -17) {Место найдено?};
+		\node [style=process] (14) at (13, -20) {Запуск ограниченного перебора $H1$};
+		\node [style=decision] (15) at (0, -23) {$s_i + \Delta \leq k_i$};
+		\node [style=process] (16) at (0, -27) {Запуск ограниченного перебора $H2$};
+		\node [style=none] (18) at (13, 7) {};
+		\node [style=none] (19) at (13, 1) {};
+		\node [style=none] (20) at (13, -17) {};
+		\node [style=none] (21) at (13, -23) {};
+		\node [style=none] (22) at (-13, -23) {};
+		\node [style=none] (23) at (-13, -27) {};
+		\node [style=none] (24) at (-13, -2) {};
+	\end{pgfonlayer}
+	\begin{pgfonlayer}{edgelayer}
+		\draw [style=arrow] (4) to (5);
+		\draw [style=arrow] (18.center) to (2);
+		\draw [style=arrow] (19.center) to (6);
+		\draw [style=arrow] (5) to node [left] {Нет} (6);
+		\draw (5) to node [above] {Да} (18.center);
+		\draw (2) to (19.center);
+		\draw [style=arrow] (6) to (7);
+		\draw [style=arrow] (7) to (8);
+		\draw [style=arrow] (8) to node [above] {Да} (9);
+		\draw [style=arrow] (8) to node [left] {Нет} (10);
+		\draw [style=arrow] (10) to (11);
+		\draw [style=arrow] (11) to (12);
+		\draw [style=arrow] (12) to (13);
+		\draw [style=arrow] (20.center) to (14);
+		\draw [style=arrow] (21.center) to (15);
+		\draw [style=arrow] (13) to node [left] {Да} (15);
+		\draw (13) to node [above] {Нет} (20.center);
+		\draw (14) to (21.center);
+		\draw [style=arrow] (15) to node [left] {Нет} (16);
+		\draw [style=arrow] (15) to node [above] {Да} (22.center);
+		\draw [style=arrow] (23.center) to (22.center);
+		\draw (23.center) to (16);
+		\draw (22.center) to (24.center);
+		\draw [style=arrow] (24.center) to (7);
+	\end{pgfonlayer}
+\end{tikzpicture}

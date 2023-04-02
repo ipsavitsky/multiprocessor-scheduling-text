@@ -1,0 +1,33 @@
+Код реализации выложен в репозитории \cite{Repository}
+В программной реализации были использованы следующие библиотеки:
+\begin{enumerate}
+    \item \mintinline{bash}{boost} 1.81 \cite{boost_framework}
+    \item \mintinline{bash}{json} 3.11.2 \cite{json_lib}
+    \item \mintinline{bash}{toml11} 3.7.1 \cite{toml11_lib}
+\end{enumerate}
+
+Проект обладает следующей структурой:
+\begin{enumerate}
+    \item \mintinline{bash}{greedy/greedy_algo.cpp}
+    \item \mintinline{bash}{greedy/schedule.cpp}
+    \item \mintinline{bash}{greedy/time_schedule.cpp}
+    \item \mintinline{bash}{graph_part.cpp}
+    \item \mintinline{bash}{input_class.cpp}
+    \item \mintinline{bash}{json_dumper.cpp}
+    \item \mintinline{bash}{logger_config.cpp}
+    \item \mintinline{bash}{options.cpp}
+    \item \mintinline{bash}{parser.cpp}
+\end{enumerate}
+
+Для сборки проекта используется \mintinline{bash}{CMake}.
+\begin{minted}{bash}
+    mkdir build
+    cd build
+    cmake ..
+    make
+\end{minted}
+
+Для сборки документации (на английском) используется \mintinline{bash}{Doxygen}.
+\begin{minted}{bash}
+    doxygen Doxyfile
+\end{minted}
