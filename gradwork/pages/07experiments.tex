@@ -58,6 +58,28 @@
     \caption{12345}    
 \end{figure}
 
+\begin{figure}[!htbp]
+    \centering
+    \includegraphics[width=\textwidth]{imgs/unbalanced/CR/cr_3d.png}
+    \caption{12345}
+\end{figure}
+
+\paragraph{Постановка NO}
+
+\begin{figure}[!htbp]
+    \centering
+    \includegraphics[width=\textwidth]{imgs/ideal_1/NO/th.png}
+    \caption{Отношение времени выполнения расписания к оптимальному времени выполнения}   
+    \label{fig:NO-GC1-times-heatmap}
+\end{figure}
+
+\begin{figure}[!htbp]
+    \centering
+    \includegraphics[width=\textwidth]{imgs/ideal_1/NO/gr_amalgamated.png}
+    \caption{Отношение времени выполнения расписания к оптимальному времени выполнения}   
+    \label{fig:NO-GC1-times-compiled}
+\end{figure}
+
 \subsubsection{Жадный алгоритм с EDF эвристикой}
 
 \paragraph{Постановка CR}
@@ -110,23 +132,71 @@
     \caption{12345}
 \end{figure}
 
+\begin{figure}
+    \centering
+    \includegraphics[width=\textwidth]{imgs/unbalanced/CR_EDF/times.png}
+    \caption{Отношение времени выполнения расписания к времени выполнения расписания, построенного при помощи жадного алгоритма с жадным критерием (тепловая карта)}
+    \label{fig:CR-disbalaned-EDF-times-heatmap}
+\end{figure}
+
+\begin{figure}[!htbp]
+    \centering
+    \includegraphics[width=\textwidth]{imgs/unbalanced/CR_EDF/gr_amalgamated.png}
+    \caption{Отношение времени выполнения расписания к времени выполнения расписания, построенного при помощи жадного алгоритма с жадным критерием}
+    \label{fig:CR-disbalanced-EDF-times-compiled}
+\end{figure}
+
+\begin{figure}[!htbp]
+    \centering
+    \includegraphics[width=\textwidth]{imgs/unbalanced/CR_EDF/cr_3d.png}
+    \caption{12345}
+\end{figure}
+
 \paragraph{Постановка NO}
+
+\begin{figure}[!htbp]
+    \centering
+    \includegraphics[width=\textwidth]{imgs/ideal_1/NO_EDF/th.png}
+    \caption{Отношение времени выполнения расписания к оптимальному времени выполнения (тепловая карта)}
+    \label{fig:NO-EDF-times-heatmap}
+\end{figure}
+
+\begin{figure}[!htbp]
+    \centering
+    \includegraphics[width=\textwidth]{imgs/ideal_1/NO_EDF/gr_amalgamated.png}
+    \caption{Отношение времени выполнения расписания к оптимальному времени выполнения} 
+    \label{fig:NO-EDF-times-compiled}
+\end{figure}
+
+\begin{figure}[!htbp]
+    \centering
+    \includegraphics[width=\textwidth]{imgs/layered_class_1/NO_EDF/times.png}
+    \caption{Отношение времени выполнения расписания к оптимальному времени выполнения (тепловая карта)}
+    \label{fig:NO-layered-EDF-times-heatmap}
+\end{figure}
+
+\begin{figure}[!htbp]
+    \centering
+    \includegraphics[width=\textwidth]{imgs/layered_class_1/NO_EDF/gr_amalgamated.png}
+    \caption{Отношение времени выполнения расписания к оптимальному времени выполнения} 
+    \label{fig:NO-layered-EDF-times-compiled}
+\end{figure}
 
 \begin{figure}[!htbp]
     \centering
     \includegraphics[width=\textwidth]{imgs/unbalanced/NO_EDF/times.png}
     \caption{Отношение времени выполнения расписания к времени выполнения расписания, построенного при помощи жадного алгоритма с жадным критерием (тепловая карта)}
-    \label{fig:NO-EDF-times-heatmap}
+    \label{fig:NO-disbalanced-EDF-times-heatmap}
 \end{figure}
 
 \begin{figure}[!htbp]
     \centering
     \includegraphics[width=\textwidth]{imgs/unbalanced/NO_EDF/gr_amalgamated.png}
     \caption{Отношение времени выполнения расписания к времени выполнения расписания, построенного при помощи жадного алгоритма с жадным критерием}
-    \label{fig:NO-EDF-times-compiled}
+    \label{fig:NO-disbalanced-EDF-times-compiled}
 \end{figure}
 
-На рисунках \ref{fig:NO-EDF-times-heatmap} и \ref{fig:NO-EDF-times-compiled} показано качество решений, генерируемых жадным алгоритмом с EDF эвристикой на данных, построенных на слоистых графах. Цветом на рисунке \ref{fig:NO-EDF-times-heatmap} и значением на оси $Oy$ на рисунке \ref{fig:NO-EDF-times-compiled} показано отношение длительности расписании расписании, построенного жадным алгоритмом с жадным кртерием. Значения всегда больше 1, чем меньше, тем лучше.
+На рисунках \ref{fig:NO-disbalanced-EDF-times-heatmap} и \ref{fig:NO-disbalanced-EDF-times-compiled} показано качество решений, генерируемых жадным алгоритмом с EDF эвристикой на данных, построенных на слоистых графах. Цветом на рисунке \ref{fig:NO-EDF-times-heatmap} и значением на оси $Oy$ на рисунке \ref{fig:NO-EDF-times-compiled} показано отношение длительности расписании расписании, построенного жадным алгоритмом с жадным кртерием. Значения всегда больше 1, чем меньше, тем лучше.
 
 Во всех случаях, качество решений выше качетва решений жадного алгоритма с жадным критерием, но это улучшение не превышает 10\%, за исключением случая с 32 процессорами.
 
@@ -168,23 +238,65 @@
 
 На рисунках \ref{fig:CR-layered-exec-time-heatmap} и \ref{fig:CR-layered-exec-time-compiled} показано время выполнения алгоритма на наборе данных, основанных на слоистых графах. Кроме двух выбросов, соотносящихся с самым малым количеством работ и самым большим количеством процессоров в системе, нет существенной зависимости времени выполнения от количества процессоров в системе.
 
+\begin{figure}[!htbp]
+    \centering
+    \includegraphics[width=\textwidth]{imgs/unbalanced/CR/et_heatmap.png}
+    \caption{Время выполнения алгоритма, в миллисекундах (тепловая карта)}
+    \label{fig:CR-unbalanced-exec-time-heatmap}
+\end{figure}
+
+\begin{figure}[!htbp]
+    \centering
+    \includegraphics[width=\textwidth]{imgs/unbalanced/CR/tr_graph.png}
+    \caption{Время выполнения алгоритма, в миллисекундах}
+    \label{fig:CR-unbalanced-exec-time-compiled}
+\end{figure}
+
 \paragraph{Постановка NO}
+
+\begin{figure}[!htbp]
+    \centering
+    \includegraphics[width=\textwidth]{imgs/ideal_1/NO/et_heatmap.png}
+    \caption{Время выполнения алгоритма, в секундах (тепловая карта)}
+    \label{fig:NO-exec-time-heatmap}
+\end{figure}
+
+\begin{figure}[!htbp]
+    \centering
+    \includegraphics[width=\textwidth]{imgs/ideal_1/NO/tr_graph.png}
+    \caption{Время выполнения алгоритма, в секундах}
+    \label{fig:NO-exec-time-compiled}
+\end{figure}
+
+\begin{figure}[!htbp]
+    \centering
+    \includegraphics[width=\textwidth]{imgs/layered_class_1/NO/et_heatmap.png}
+    \caption{Время выполнения алгоритма, в миллисекундах (тепловая карта)}
+    \label{fig:NO-layered-exec-time-heatmap}
+\end{figure}
+
+\begin{figure}[!htbp]
+    \centering
+    \includegraphics[width=\textwidth]{imgs/layered_class_1/NO/tr_graph.png}
+    \caption{Время выполнения алгоритма, в миллисекундах}
+    \label{fig:NO-layered-exec-time-compiled}
+\end{figure}
 
 \begin{figure}[!htbp]
     \centering
     \includegraphics[width=\textwidth]{imgs/unbalanced/NO/et_heatmap.png}
     \caption{Время выполнения алгоритма, в миллисекундах (тепловая карта)}
-    \label{fig:NO-exec-time-heatmap}
+    \label{fig:NO-unbalanced-exec-time-heatmap}
 \end{figure}
 
 \begin{figure}[!htbp]
     \centering
     \includegraphics[width=\textwidth]{imgs/unbalanced/NO/tr_graph.png}
     \caption{Время выполнения алгоритма, в миллисекундах}
-    \label{fig:NO-exec-time-compiled}
+    \label{fig:NO-unbalanced-exec-time-compiled}
 \end{figure}
 
-На рисунках \ref{fig:NO-exec-time-heatmap} и \ref{fig:NO-exec-time-compiled} показано время выполнения алгоритма на наборе данных c неоднородными процессорами. Время выполнения увеличивается с увеличением количества задач и с увеличением количества процессоров.
+На рисунках \ref{fig:NO-unbalanced-exec-time-heatmap} и \ref{fig:NO-unbalanced-exec-time-compiled} показано время выполнения алгоритма на наборе данных c неоднородными процессорами. Время выполнения увеличивается с увеличением количества задач и с увеличением количества процессоров.
 
 \subsubsection{Жадный алгоритм с EDF эвристикой}
 
@@ -222,20 +334,62 @@
 
 На рисунках \ref{fig:CR-layered-EDF-exec-time-heatmap} и \ref{fig:CR-layered-EDF-exec-time-compiled} показано время выполнения жадного алгоритма с EDF эвристикой, включая прогоны METIS, на слоистых данных, основанных на слоистых графах. Как и для жадного алгоритма с жадной эвристикой, на данных видно два выброса, которые соотносятся с самым большим количеством процессором и самым маленьким количеством работ в исходных данных. Также не существует значимой зависимости между количеством процессоров в системе и временем, затраченным на построение расписания. Алгоритм работает в несколько раз быстрее жадного алгоритма с жадным критерием.
 
+\begin{figure}[!htbp]
+    \centering
+    \includegraphics[width=\textwidth]{imgs/unbalanced/CR_EDF/et_heatmap.png}
+    \caption{Время выполнения алгоритма, в миллисекундах (тепловая карта)}
+    \label{fig:CR-unbalanced-EDF-exec-time-heatmap}
+\end{figure}
+
+\begin{figure}[!htbp]
+    \centering
+    \includegraphics[width=\textwidth]{imgs/unbalanced/CR_EDF/tr_graph.png}
+    \caption{Время выполнения алгоритма, в миллисекундах}
+    \label{fig:CR-unbalanced-EDF-exec-time-compiled}
+\end{figure}
+
 \paragraph{Постановка NO}
+
+\begin{figure}[!htbp]
+    \centering
+    \includegraphics[width=\textwidth]{imgs/ideal_1/NO_EDF/et_heatmap.png}
+    \caption{Время выполнения алгоритма, в секундах (тепловая карта)}
+    \label{fig:NO-EDF-exec-time-heatmap}
+\end{figure}
+
+\begin{figure}[!htbp]
+    \centering
+    \includegraphics[width=\textwidth]{imgs/ideal_1/NO_EDF/tr_graph.png}
+    \caption{Время выполнения алгоритма, в секундах}
+    \label{fig:NO-EDF-exec-time-compiled}
+\end{figure}
+
+\begin{figure}[!htbp]
+    \centering
+    \includegraphics[width=\textwidth]{imgs/layered_class_1/NO_EDF/et_heatmap.png}
+    \caption{Время выполнения алгоритма, в миллисекундах (тепловая карта)}
+    \label{fig:NO-layered-EDF-exec-time-heatmap}
+\end{figure}
+
+\begin{figure}[!htbp]
+    \centering
+    \includegraphics[width=\textwidth]{imgs/layered_class_1/NO_EDF/tr_graph.png}
+    \caption{Время выполнения алгоритма, в миллисекундах}
+    \label{fig:NO-layered-EDF-exec-time-compiled}
+\end{figure}
 
 \begin{figure}[!htbp]
     \centering
     \includegraphics[width=\textwidth]{imgs/unbalanced/NO_EDF/et_heatmap.png}
     \caption{Время выполнения алгоритма, в миллисекундах (тепловая карта)}
-    \label{fig:NO-EDF-exec-time-heatmap}
+    \label{fig:NO-unbalanced-EDF-exec-time-heatmap}
 \end{figure}
 
 \begin{figure}[!htbp]
     \centering
     \includegraphics[width=\textwidth]{imgs/unbalanced/NO_EDF/tr_graph.png}
     \caption{Время выполнения алгоритма, в миллисекундах}
-    \label{fig:NO-EDF-exec-time-compiled}
+    \label{fig:NO-unbalanced-EDF-exec-time-compiled}
 \end{figure}
 
-На рисунках \ref{fig:CR-layered-EDF-exec-time-heatmap} и \ref{fig:CR-layered-EDF-exec-time-compiled} показано время выполнения жадного алгоритма с EDF эвристикой, включая прогоны METIS, на слоистых данных с неоднородными процессорами. Алгоритм выполняется быстрее жадного алгоритма с жадным критерием, однако разница во времени выполнения незначительна. Время выполнения алгоритма увеличивается с увеличением количества работ и процессоров в системе.
+На рисунках \ref{fig:NO-unbalanced-EDF-exec-time-heatmap} и \ref{fig:NO-unbalanced-EDF-exec-time-compiled} показано время выполнения жадного алгоритма с EDF эвристикой, включая прогоны METIS, на слоистых данных с неоднородными процессорами. Алгоритм выполняется быстрее жадного алгоритма с жадным критерием, однако разница во времени выполнения незначительна. Время выполнения алгоритма увеличивается с увеличением количества работ и процессоров в системе.
