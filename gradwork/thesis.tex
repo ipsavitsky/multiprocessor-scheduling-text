@@ -23,7 +23,6 @@ style=gost-numeric,
 % sorting=ynt
 ]{biblatex}
 
-\usepackage{tikzit}
 
 \usepackage[a4paper,top=20mm,bottom=20mm,left=30mm,right=10mm]{geometry}
 
@@ -31,6 +30,14 @@ style=gost-numeric,
 \usepackage{caption}
 
 \usepackage{mathtools}
+
+% \usepackage{tikz}
+\usepackage{pgf-umlcd}
+\usepackage{tikzit}
+
+\renewcommand{\umlfillcolor}{white}
+\renewcommand{\umldrawcolor}{black}
+% \usepackage{underscore}
 
 \renewcommand{\cftsecleader}{\cftdotfill{\cftdotsep}}
 
@@ -64,6 +71,8 @@ style=gost-numeric,
 \title{Жадные алгоритмы для построения многопроцессорного списочного расписания}
 \date{Москва, 2022}
 
+% \pgfsetlayers{connectionlayers}
+
 \begin{document}
 \input{pages/00titlepage.tex}
 \newpage
@@ -78,7 +87,7 @@ style=gost-numeric,
 \input{pages/01introduction.tex}
 % ----------------------------------------------------------------------------------------------------------------------
 \newpage
-\section{Цели и задачи курсовой работы}
+\section{Цели и задачи этой работы}
 \input{pages/02goals.tex}
 % ----------------------------------------------------------------------------------------------------------------------
 \newpage

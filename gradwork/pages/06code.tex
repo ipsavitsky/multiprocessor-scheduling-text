@@ -1,31 +1,66 @@
 \subsection{Описание кода программной реализации}
-Код реализации выложен на \mintinline{bash}{C++} в репозитории \cite{Repository}. Диаграмма калссов реализации представлена на рисунке \ref{fig:UML}.
+Код реализации выложен на \texttt{C++} в репозитории \cite{Repository}. Диаграмма калссов реализации представлена на рисунке \ref{fig:UML}.
+
 
 \begin{figure}[!htbp]
     \centering
-    \includegraphics[width=0.8\textwidth]{imgs/final_UML.drawio.png}
+    \begin{tikzpicture}
+        \begin{class}[text width=9cm]{ScheduleData}{-4,0}
+            \attribute{+ tran\_times : boost::numeric::ublas::matrix}
+            \attribute{+ task\_times : boost::numeric::ublas::matrix}
+            \attribute{- graph : Graph}
+        \end{class}
+
+        \begin{class}[text width=10cm]{TimeDiagram}{-4, -9}
+            \attribute{+ proc\_array : std::vector<std::list<PlacedTask\verb|>>|}
+            \operation{+ extract\_data(conf : greedy\_config) : Output\_data}
+        \end{class}
+
+        \begin{class}[text width=9.6cm]{OutputData}{3, -4}
+            \attribute{+ CR : double}
+            \attribute{+ criteria : opts::greedy\_config::extra\_criteria}
+            \attribute{+ nodes : unsigned int}
+            \attribute{+ time : unsigned long}
+            \attribute{+ proc\_array : std::vector<std::list<PlacedTask\verb|>>|}
+        \end{class}
+
+        \begin{class}{GreedyConfig}{5.5, 0}
+            \attribute{+ criteria : extra\_criteria}
+            \attribute{+ CR\_bound : double}
+            \attribute{+ \_class : input\_class}
+        \end{class}
+        
+        \begin{class}{PlacedTask}{5.5, -9}
+            \attribute{+ task\_no : unsigned int}
+            \attribute{+ start : unsigned int}
+            \attribute{+ finish : unsigned int}
+        \end{class}
+
+        \composition{TimeDiagram}{sched}{}{ScheduleData}
+        \composition{ScheduleData}{conf}{}{GreedyConfig}
+    \end{tikzpicture}
     \caption{UML-диаграмма реализации}
     \label{fig:UML}
 \end{figure}
 
 Среди представленных классов:
 \begin{itemize}
-    \item \mintinline{C++}{ScheduleData} - класс, хранящий в себе входные данные и выполняющий всю необходимую их предобработку.
-    \item \mintinline{C++}{TimeDiagram} - класс, хранящий в себе частичное или полное расписание.
-    \item \mintinline{C++}{PlacedTask} - класс, хранящий в себе информацию о поставленной в расписание работе.
+    \item \texttt{ScheduleData} - класс, хранящий в себе входные данные и выполняющий всю необходимую их предобработку.
+    \item \texttt{TimeDiagram} - класс, хранящий в себе частичное или полное расписание.
+    \item \texttt{PlacedTask} - класс, хранящий в себе информацию о поставленной в расписание работе.
 \end{itemize}
 
 Жадные алгоритмы реализованы в функциях, не инкапсулированных в классах:
 \begin{itemize}
-    \item \mintinline{C++}{construct_time_schedule()} - жадный алгоритм с жадным критерием.
-    \item \mintinline{C++}{greedy_EDF_heuristic()} - Жадный алгоритм с EDF эвристикой.
+    \item \texttt{construct\_time\_schedule()} - жадный алгоритм с жадным критерием.
+    \item \texttt{greedy\_EDF\_heuristic()} - Жадный алгоритм с EDF эвристикой.
 \end{itemize}
 
 В репозиторий включены следубщие библиотеки:
 \begin{enumerate}
-    \item \mintinline{bash}{METIS} 5.1.0 \cite{METIS_lib} - библиотека для разбиения графов.
-    \item \mintinline{bash}{json} 3.11.2 \cite{json_lib} - библиотека для работы с форматом JSON. Используется для составления выходных файлов.
-    \item \mintinline{bash}{toml11} 3.7.1 \cite{toml11_lib} - библиотека для работы с форматом TOML. Используется для чтения конфигурационных файлов.
+    \item \texttt{METIS} 5.1.0 \cite{METIS_lib} - библиотека для разбиения графов.
+    \item \texttt{json} 3.11.2 \cite{json_lib} - библиотека для работы с форматом JSON. Используется для составления выходных файлов.
+    \item \texttt{toml11} 3.7.1 \cite{toml11_lib} - библиотека для работы с форматом TOML. Используется для чтения конфигурационных файлов.
 \end{enumerate}
 
 Также, у реализации есть зависимость, не включенная в репозиторий - \mintinline{bash}{boost} 1.80 \cite{boost_framework}. Для сборки проекта используется \mintinline{bash}{CMake}. Инструкция по сборке приведена в листинге \ref{lst:build}. Для сборки документации (на английском) используется \mintinline{bash}{Doxygen}. Инфструкция по сборке документации приведена в листинге \ref{lst:docs}
