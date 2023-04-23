@@ -1,0 +1,57 @@
+\documentclass[hyperref=unicode, aspectratio=169]{beamer}
+\usepackage[utf8]{inputenc}
+\usepackage[T2A]{fontenc}
+\usepackage[russian]{babel}
+\usepackage{csquotes}
+\usepackage{tikzit}
+\usepackage[justification=centering]{caption}
+\usepackage{mathabx}
+\usepackage{bookmark}
+\usepackage{makecell}
+\usepackage{listings}
+\usepackage{flowchart}
+\usepackage{subcaption}
+\usepackage{caption}
+
+\captionsetup[figure]{labelformat=empty}
+
+
+\title[]{Жадные алгоритмы для построения многопроцессорного списочного расписания}
+\usetheme{Madrid}
+\author[]{Савицкий Илья\\Научный руководитель: к.т.н. доцент Костенко Валерий Алексеевич}
+% \medskip
+% \texttt{Научный руководитель: к.т.н. доцент Костенко Валерий Алексеевич}
+\date{27 апреля 2023 г.}
+\logo{\includegraphics[width=1.5cm]{imgs/asvk-logo.png}}
+
+
+\definecolor{ASVKaccent}{rgb}{0.20392,0.02745,0.34509}
+\usecolortheme[named=ASVKaccent]{structure}
+
+\input{block-schemas.tikzstyles}
+
+\begin{document}
+
+\begin{frame}
+    \titlepage
+\end{frame}
+
+\section{Цель и задачи дипломной работы}
+\input{slides/01goals.tex}
+
+\section{Описание прикладной задачи}
+\input{slides/02task_desc.tex}
+
+\section{Выводы по обзору}
+\input{slides/03overview.tex}
+
+\section{Описание предложенного алгоритма}
+\input{slides/04algorithm.tex}
+
+\section{Результаты исследования}
+\input{slides/06experiments.tex}
+
+\section{Полученные рещультаты}
+\input{slides/07results.tex}
+
+\end{document}

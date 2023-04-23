@@ -1,0 +1,18 @@
+\begin{tikzpicture}
+	\begin{pgfonlayer}{nodelayer}
+		\node [style={real_node}] (0) at (2, 5) {$x_1$};
+		\node [style={real_node}] (1) at (0, 3) {$x_3$};
+		\node [style={real_node}] (2) at (4, 3) {$x_4$};
+		\node [style={real_node}] (3) at (-4, 3) {$x_2$};
+		\node [style={real_node}] (4) at (-2, 1) {$x_5$};
+		\node [style={fictive_node}, label=above:{Фиктивная вершина}] (5) at (-1, 7) {$x_0$};
+	\end{pgfonlayer}
+	\begin{pgfonlayer}{edgelayer}
+		\draw [style=arrow] (0) to (1);
+		\draw [style=arrow] (0) to (2);
+		\draw [style=arrow] (1) to (4);
+		\draw [style=arrow] (3) to (4);
+		\draw [style={fictive_arrow}] (5) to (0);
+		\draw [style={fictive_arrow}] (5) to (3);
+	\end{pgfonlayer}
+\end{tikzpicture}
