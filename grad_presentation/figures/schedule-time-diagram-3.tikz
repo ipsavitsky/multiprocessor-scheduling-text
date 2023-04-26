@@ -62,6 +62,6 @@
 		\draw (18.center) to (17.center);
 		\draw (22.center) to (23.center);
 		\draw (25.center) to (24.center);
-		\draw [style=arrow] (47) to (48);
+		% \draw [style=arrow] (47) to (48);
 	\end{pgfonlayer}
 \end{tikzpicture}

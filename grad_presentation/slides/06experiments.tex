@@ -1,15 +1,34 @@
 \begin{frame}
+    \frametitle{Наборы данных для исследования}
+    Для исследования качества решений и временной сложности алгоритма были созданы следующие наборы данных:
+    \begin{enumerate}
+        \item Набор данных с известным оптимумом.
+        % \begin{itemize}
+        %     \item 2000; 5000; 10000; 20000; 30000; 40000; 50000; 75000; 100000 работ
+        % \end{itemize}
+        \item Набор данных, основанных на слоистых данных.
+        % \begin{itemize}
+        %     \item 
+        % \end{itemize}
+        \item Набор данных для построения расписания на неоднородных процессорах.
+        % \begin{itemize}
+        %     \item 
+        % \end{itemize}
+    \end{enumerate}
+\end{frame}
+
+\begin{frame}
     \frametitle{Точность полученного расписания. CR}
     \begin{figure}
         \begin{subfigure}{0.49\textwidth}
             \includegraphics[width=\textwidth]{imgs/ideal_1/CR/gr_amalgamated.png}
-            \caption{Жадный алгоритм}
+            \caption{Жадный алгоритм с выбором по числу потомков}
         \end{subfigure}
         \begin{subfigure}{0.49\textwidth}
             \includegraphics[width=\textwidth]{imgs/ideal_1/CR_EDF/gr_amalgamated.png}
             \caption{Жадный алгоритм с фиктивными директивными сроками}
         \end{subfigure}
-        \caption{Качество решений алгоритмов на данных с известным оптимумом,\\ дополнительная постановка $CR$}
+        \caption{Качество решений алгоритмов на данных с известным оптимумом,\\ постановка с дополнительным ограничением на межпроцессорные передачи}
     \end{figure}
 \end{frame}
 
@@ -18,64 +37,13 @@
     \begin{figure}
         \begin{subfigure}{0.49\textwidth}
             \includegraphics[width=\textwidth]{imgs/ideal_1/NO/gr_amalgamated.png}
-            \caption{Жадный алгоритм}
+            \caption{Жадный алгоритм с выбором по числу потомков}
         \end{subfigure}
         \begin{subfigure}{0.49\textwidth}
             \includegraphics[width=\textwidth]{imgs/ideal_1/NO_EDF/gr_amalgamated.png}
             \caption{Жадный алгоритм с фиктивными директивными сроками}
         \end{subfigure}
-        \caption{Качество решений алгоритмов на данных с известным оптимумом,\\ дополнительная постановка $NO$}
+        \caption{Качество решений алгоритмов на данных с известным оптимумом,\\ постановка без дополнительных ограничений}
     \end{figure}
 \end{frame}
 
-\begin{frame}
-    \frametitle{Проблема проверки алгоритма на данных с известным оптимумом}
-    \begin{figure}
-        \includegraphics[width=0.6\textwidth]{imgs/balanced-schedule.jpg}
-    \end{figure}
-\end{frame}
-
-\begin{frame}
-    \frametitle{Точность полученного расписания. CR и NO}
-    \begin{figure}
-        \begin{subfigure}{0.49\textwidth}
-            \includegraphics[width=\textwidth]{imgs/layered_class_1/CR_EDF/gr_amalgamated.png}
-            \caption{При постановке CR}
-        \end{subfigure}
-        \begin{subfigure}{0.49\textwidth}
-            \includegraphics[width=\textwidth]{imgs/layered_class_1/NO_EDF/gr_amalgamated.png}
-            \caption{При постановке NO}
-        \end{subfigure}
-        \caption{Отношение длительности работы алгоритма с фиктивными директивными сроками к длительности\\работы жадного алгоритма на данных, основанных на слоистых графах}
-    \end{figure}
-\end{frame}
-
-\begin{frame}
-    \frametitle{Точность полученного расписания. CR и NO}
-    \begin{figure}
-        \begin{subfigure}{0.49\textwidth}
-            \includegraphics[width=\textwidth]{imgs/unbalanced/CR_EDF/gr_amalgamated.png}
-            \caption{При постановке CR}
-        \end{subfigure}
-        \begin{subfigure}{0.49\textwidth}
-            \includegraphics[width=\textwidth]{imgs/unbalanced/NO_EDF/gr_amalgamated.png}
-            \caption{При постановке NO}
-        \end{subfigure}
-        \caption{Отношение длительности работы алгоритма с фиктивными директивными сроками к длительности\\работы жадного алгоритма на данных, основанных на неоднородных процессорах}
-    \end{figure}
-\end{frame}
-
-\begin{frame}
-    \frametitle{Время выполнения программы. CR и NO.}
-    \begin{figure}
-        \begin{subfigure}{0.49\textwidth}
-            \includegraphics[width=\textwidth]{imgs/ideal_1/CR/tr_graph.png}
-            \caption{Жадный алгоритм}
-        \end{subfigure}
-        \begin{subfigure}{0.49\textwidth}
-            \includegraphics[width=\textwidth]{imgs/ideal_1/CR_EDF/tr_graph.png}
-            \caption{Жадный алгоритм с фиктивными директивными сроками}
-        \end{subfigure}
-        \caption{Время выполнения алгоритма на данных с известным оптимумом, в секундах}
-    \end{figure}
-\end{frame}

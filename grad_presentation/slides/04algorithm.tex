@@ -18,49 +18,49 @@
 
 
 \begin{frame}
-    \frametitle{Общая схема жадных алгоритмов}
+    \frametitle{Общая схема жадных алгоритмов построения расписания}
     {
         \small
         \begin{tikzpicture}
-            \node (start) at (0, 0) [draw, terminal] {Старт};
+            \node (start) at (0, 0) [draw, terminal] {Начало};
             \node (decision) at (0, -2) [draw, decision, align=center] {Все работы добавлены \\ в расписание?};
-            \node (finish) at (-4, -3) [draw, terminal] {Финиш};
+            \node (finish) at (-4, -3) [draw, terminal] {Конец};
             \node (choose_task) at (0, -4.1) [draw, process] {Выбрать следующую работу для постановки};
             \node (choose_proc) at (0, -5.5) [draw, process] {Выбрать процессор для работы};
             \node (add_task) at (6, -5.5) [draw, process] {Поставить работу на процессор};
-    
-            \draw[->] (start) -- (decision);
-            \draw[->] (decision) -- node[right]{Нет} (choose_task);
-            \draw[->] (choose_task) -- (choose_proc);
-            \draw[->] (choose_proc) -- (add_task);
-            \draw[->] (add_task) |- (decision);
-            \draw[->] (decision) -| node[above]{Да} (finish);
+
+            \draw[thick, ->] (start) -- (decision);
+            \draw[thick, ->] (decision) -- node[right]{Нет} (choose_task);
+            \draw[thick, ->] (choose_task) -- (choose_proc);
+            \draw[thick, ->] (choose_proc) -- (add_task);
+            \draw[thick, ->] (add_task) |- (decision);
+            \draw[thick, ->] (decision) -| node[above]{Да} (finish);
         \end{tikzpicture}
     }
-    
+
 \end{frame}
 
 \begin{frame}
-    \frametitle{Жадный алгоритм}
+    \frametitle{Жадный алгоритм с выбором по числу потомков}
     \begin{enumerate}
         \item Выбор следующей работы на постановку - критерий $GC1$
         \item Выбор процессора для работы
-        \begin{itemize}
-            \item Для $CR$ - из изначально заданного разбиения
-            \item Для $NO$ - по критерию $GC2$
-        \end{itemize}
+              \begin{itemize}
+                  \item Для $CR$ - из изначально заданного распределения
+                  \item Для $NO$ - по критерию $GC2$
+              \end{itemize}
     \end{enumerate}
     Зададим множество доступных для добавления вершин $D= \left( d_1, d_2, \dots, d_l \right)$, где $l$ - количество вершин, доступных для добавления.
     \begin{columns}
         \begin{column}{0.6\textwidth}
             \textbf{Критерий $GC1$:} \\
-    Из множества $\color{red}D$ выбирается работa по критерию $GC1$ максимальности количества потомков у вершины. \\
+            Из множества $\color{red}D$ выбирается работa по критерию $GC1$ максимальности количества потомков у вершины. \\
             \textbf{Критерий $GC2$:} \\
-        Работа ставится на процессор, на котором время завершения работы будет минимальным.
+            Работа ставится на процессор, на котором время завершения работы будет минимальным.
 
         \end{column}
         \begin{column}{0.4\textwidth}
-            \ctikzfig{max_children}            
+            \ctikzfig{max_children}
         \end{column}
     \end{columns}
 \end{frame}
@@ -72,13 +72,13 @@
             При постановке требуется найти такое минимальное время $t$, чтобы
             \begin{enumerate}
                 \item Все передачи данных завершились до $t$;
-                \item Существует интервал простоя времени не меньший времени выполнения работы, начинающийся в $t$.
+                \item Существует интервал простоя длительности не меньший времени выполнения работы, начинающийся в $t$.
             \end{enumerate}
         \end{column}
         \begin{column}{0.45\textwidth}
             {
                 \tiny
-                \ctikzfig{schedule-time-diagram}
+                \ctikzfig{schedule-time-diagram-3}
             }
             {
                 \tiny
@@ -91,14 +91,25 @@
 \begin{frame}
     \frametitle{Жадный алгоритм с фиктивными директивными сроками}
     \begin{enumerate}
-        \item Выбор следующей работы на постановку - в соответствии с EDF эвристикой;
+        \item Выбор следующей работы на постановку - в порядке возрастания фиктивных директивных сроков;
         \item Выбор процессора для работы:
-        \begin{itemize}
-            \item Для $CR$ - из изначально заданного разбиения
-            \item Для $NO$ - по критерию $GC2$
-        \end{itemize}
+              \begin{itemize}
+                  \item Для $CR$ - из изначально заданного распределения
+                  \item Для $NO$ - по критерию $GC2$
+              \end{itemize}
     \end{enumerate}
-    Пусть \textbf{длина пути} - сумма всех задержек передач данных и времен выполнения работ на процессорах.
-    Пусть директивный срок всего расписания $d$, а $p_A$ - длина длиннейшего пути от работы $A$ до работы $S$ такой, что у $S$ нет потомков. Тогда директивный срок $d_A$ вершины $A$ равен $d_A - p$.
+    % Пусть \textbf{длина пути} - сумма всех задержек передач данных и времен выполнения работ на процессорах.
+    % Пусть директивный срок всего расписания $d$, а $p_A$ - длина длиннейшего пути от работы $A$ до работы $S$ такой, что у $S$ нет потомков. Тогда директивный срок $d_A$ вершины $A$ равен $d_A - p$.
+    % \begin{figure*}
+    \begin{columns}
+        \begin{column}{0.5\textwidth}
+            \ctikzfig{edf}
+        \end{column}
+        \begin{column}{0.5\textwidth}
+            Распространение директивных сроков по графу потока управления.\\Все межпроцессорные передачи равны 2. Только $x_2$ и $x_5$ находятся на разных процессорах.
+        \end{column}
+    \end{columns}
+    % \captionof{figure}{Распространение директивных сроков по графу потока управления.\\Все межпроцессорные передачи равны 2. Только $x_2$ и $x_5$ находятся на разных\\процессорах.}
+    % \end{figure*}
 \end{frame}
 
