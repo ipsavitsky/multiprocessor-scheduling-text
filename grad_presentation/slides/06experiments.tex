@@ -47,3 +47,55 @@
     \end{figure}
 \end{frame}
 
+\begin{frame}
+    \frametitle{Программная реализация алгоритма}
+    \begin{columns}
+        \begin{column}{0.5\textwidth}
+            \begin{figure}
+                \centering
+                \begin{tikzpicture}
+                    \tiny
+                    \begin{class}{ScheduleData}{0, 0}
+                        \attribute{+ tran\_times : boost::numeric::ublas::matrix}
+                        \attribute{+ task\_times : boost::numeric::ublas::matrix}
+                        \attribute{- graph : Graph}
+                    \end{class}
+            
+                    \begin{class}{TimeDiagram}{0, -2.2}
+                        \attribute{+ proc\_array : std::vector<std::list<PlacedTask>>}
+                        \operation{+ extract\_data(conf : greedy\_config) : Output\_data}
+                    \end{class}
+            
+                    \begin{class}{OutputData}{0, -4.2}
+                        \attribute{+ CR : double}
+                        \attribute{+ criteria : opts::greedy\_config::extra\_criteria}
+                        \attribute{+ nodes : unsigned int}
+                        \attribute{+ time : unsigned long}
+                        \attribute{+ proc\_array : std::vector<std::list<PlacedTask>>}
+                    \end{class}
+            
+                    \begin{class}[text width=2.7cm]{GreedyConfig}{5, 0}
+                        \attribute{+ criteria : extra\_criteria}
+                        \attribute{+ CR\_bound : double}
+                        \attribute{+ \_class : input\_class}
+                    \end{class}
+                    
+                    \begin{class}[text width=3cm]{PlacedTask}{5, -5}
+                        \attribute{+ task\_no : unsigned int}
+                        \attribute{+ start : unsigned int}
+                        \attribute{+ finish : unsigned int}
+                    \end{class}
+            
+                    \composition{TimeDiagram}{sched}{}{ScheduleData}
+                    \composition{ScheduleData}{conf}{}{GreedyConfig}
+                \end{tikzpicture}
+                % \caption{UML-диаграмма реализации}
+                \label{fig:UML}
+            \end{figure}
+        \end{column}
+        \begin{column}{0.5\textwidth}
+            Программная реализация была выполнена на языке \texttt{C++}, с использованием библиотек \texttt{boost}, \texttt{METIS}, \texttt{json} и \texttt{toml}. Реализация занимает 1689 строк.
+        \end{column}
+    \end{columns}
+\end{frame}
+
