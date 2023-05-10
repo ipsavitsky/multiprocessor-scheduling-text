@@ -47,6 +47,8 @@
 		\node [style=none] (44) at (0, 3) {$3$};
 		\node [style=none] (45) at (2, 3) {$4$};
 		\node [style=none] (46) at (4, 3) {$5$};
+		\node [style=none] (47) at (0, 0) {};
+		\node [style=none] (48) at (2, -1.5) {};
 	\end{pgfonlayer}
 	\begin{pgfonlayer}{edgelayer}
 		\draw (0.center) to (3.center);
@@ -63,5 +65,6 @@
 		\draw (18.center) to (17.center);
 		\draw (22.center) to (23.center);
 		\draw (25.center) to (24.center);
+		\draw[->] (47.center) to (48.center);
 	\end{pgfonlayer}
 \end{tikzpicture}
