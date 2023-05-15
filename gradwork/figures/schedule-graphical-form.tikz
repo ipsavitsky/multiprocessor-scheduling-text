@@ -1,7 +1,7 @@
 \begin{tikzpicture}
 	\begin{pgfonlayer}{nodelayer}
-		\node [style=none] (5) at (-2, 1) {Pr1};
-		\node [style=none] (6) at (-2, -2) {Pr2};
+		\node [style=none] (5) at (-2, 1) {$Pr3$};
+		\node [style=none] (6) at (-2, -2) {$Pr2$};
 		\node [style={real_node}] (7) at (0, 1) {$1$};
 		\node [style={real_node}] (8) at (3, 1) {$10$};
 		\node [style={real_node}] (9) at (6, 1) {$4$};
@@ -21,7 +21,7 @@
 		\node [style=none] (23) at (6, -3.5) {$\left( 2, 3 \right)$};
 		\node [style=none] (24) at (0, -6.5) {$\left( 3, 1 \right)$};
 		\node [style=none] (25) at (3, -6.5) {$\left( 3, 2 \right)$};
-		\node [style=none] (26) at (-2, -5) {Pr3};
+		\node [style=none] (26) at (-2, -5) {$Pr1$};
 	\end{pgfonlayer}
 	\begin{pgfonlayer}{edgelayer}
 		\draw [style=arrow] (7) to (8);
@@ -32,6 +32,7 @@
 		\draw [style=arrow] (19) to (20);
 		\draw [style=arrow, bend right=60] (8) to (11);
 		\draw [style=arrow] (8) to (18);
-		\draw [style=arrow, bend left=90, looseness=1.25] (9) to (20);
+		\draw [style=arrow, bend right=60] (11) to (20);
+		% \draw [style=arrow, bend left=90, looseness=1.25] (9) to (20);
 	\end{pgfonlayer}
 \end{tikzpicture}
