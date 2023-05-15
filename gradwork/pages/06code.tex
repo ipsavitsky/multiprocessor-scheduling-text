@@ -29,7 +29,7 @@
             \attribute{+ CR\_bound : double}
             \attribute{+ \_class : input\_class}
         \end{class}
-        
+
         \begin{class}{PlacedTask}{5.5, -9}
             \attribute{+ task\_no : unsigned int}
             \attribute{+ start : unsigned int}
@@ -87,7 +87,7 @@
 
 \subsection{Описание интерфейса программной реализации}
 \subsubsection{Параметры командной строки}
-Из исходного кода реализации алгоритма собирается утилита, с интерфейсом, описанным в листинге \ref{lst:template} и таблице \ref{tbl:command-line-parameters}. 
+Из исходного кода реализации алгоритма собирается утилита, с интерфейсом, описанным в листинге \ref{lst:template} и таблице \ref{tbl:command-line-parameters}.
 \begin{listing}[!htbp]
     \begin{minted}[breaklines]{bash}
         opts <algorithm_name> --input <input_file> --output <output_file> --conf <config_file> --log <log_level>
@@ -159,8 +159,29 @@
     \label{lst:config-file}
 \end{listing}
 
+\subsubsection{Описание входных файлов}
+
+В качестве формата входных файлов был разработан специальный формат, определяющий собой вычислительную систему. Он представляет собой текстовый файл, разделы которого приведены в таблице \ref{tbl:input-file-fields}.
+
+\begin{table}
+    \centering
+    \begin{tabularx}{\textwidth}{|X|X|}
+        \hline
+        \texttt{8 3 5}                                                                                       & Числа $n$ (количество работ), $p$ (количество процессоров) и $m$ (количество ребер)                                                              \\
+        \hline
+        \texttt{1 3 2 4 6 8 1 1} \newline \texttt{1 3 2 4 6 8 1 1} \newline \texttt{2 6 4 8 12 16 2 2}       & Матрица $C$ времени выполнения работ на процессорах размером $p \times n$. $C_ij$ соовтетствует времени выполнения работы $i$ на процессоре $j$. \\
+        \hline
+        \texttt{2}                                                                                           & Время, затрачиваемое на межпроцессорную передачу.                                                                                                \\
+        \hline
+        \texttt{0 1} \newline \texttt{0 5} \newline \texttt{1 2} \newline \texttt{1 3} \newline \texttt{2 7} & Пары, соответствующие ребрам в графе, представленные в виде $m$ строк. $i\;j$ означает, что в графе потока управления пристуствует ребро из вершины $i$ в вершину $j$.                                                                                                                                            \\
+        \hline
+    \end{tabularx}
+    \caption{Поля входного файла}
+    \label{tbl:input-file-fields}
+\end{table}
+
 \subsubsection{Описание выходных файлов}
-В качестве формата выходных файлов был выбран формат \texttt{json}. Пример конфигурационного файла приведен \ref{lst:output-file} и таблице \ref{tbl:output-file-fields}. Конфигурационный файл содержит информацию о характеристиках построенного расписания, а так же информацию о привязках и порядке постановке работ на процессорах.
+В качестве формата выходных файлов был выбран формат \texttt{json}. Пример выходного файла приведен в листинге \ref{lst:output-file} и таблице \ref{tbl:output-file-fields}. Выходной файл содержит информацию о характеристиках построенного расписания, а так же информацию о привязках и порядке постановке работ на процессорах.
 \begin{table}[!htbp]
     \centering
     \begin{tabularx}{\textwidth}{|c|X|}
