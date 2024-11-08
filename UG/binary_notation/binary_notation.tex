@@ -1,0 +1,327 @@
+\documentclass[hyperref=unicode, aspectratio=169]{beamer}
+\usepackage[utf8]{inputenc}
+\usepackage[T2A]{fontenc}
+\usepackage[russian]{babel}
+% \usepackage{NotesTeX_rus}
+
+\uselanguage{russian}
+\languagepath{russian}
+
+\beamertemplatenavigationsymbolsempty
+
+% \deftranslation[to=russian]{example}{пример}
+\deftranslation[to=russian]{Example}{Пример}
+% \deftranslation[to=russian]{definition}{определение}
+\deftranslation[to=russian]{Definition}{Определение}
+
+\title{Системы счисления и двоичная запись }
+\author[]{Савицкий Илья Павлович и Тетерин Дмитрий Юрьевич}
+\date[]{Июль 2022}
+
+\usetheme{Madrid}
+
+\begin{document}
+
+\maketitle
+
+\begin{frame}{Определения}
+    \begin{definition}{\textbf{Система счисления}}
+        - знаковая система, в которой приняты определенные правила записи чисел.
+    \end{definition}
+    \begin{definition}{\textbf{Цифры}}
+        - знаки, при помощи которых записываются числа.
+    \end{definition}
+    \begin{definition}{\textbf{Алфавит}}
+        системы счисления - совокупность цифр.
+    \end{definition}
+\end{frame}
+
+\begin{frame}{Непозиционные системы счисления}
+    \begin{itemize}
+        \item Унарная \\
+              Самая первая из всех созданных. Алфавит: | \\
+              $5_{10} = |||||$
+        \item Римская \\
+              Самая известная на данный момент. Значение символа диктуется не абсолютным, а относительным положением в числе.
+        \item \ldots и много много других архаизмов, которые показали свою нежизнеспособность тем, что с ними сложно проводить арифметику
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Знакомые нам системы счисления}
+    \begin{example}
+        Десятичная система счисления состоит из цифр:
+        \begin{gather*}
+            0, 1, 2, 3, 4, 5, 6, 7, 8, 9
+        \end{gather*}
+        Это её алфавит.
+    \end{example}
+\end{frame}
+
+\begin{frame}{Как работает алфавит?}
+    \begin{example}
+        Как составить \textit{любое} число при помощи алфавита?
+        \begin{gather*}
+            548 = 5 \cdot 100 + 4 \cdot 10 + 8
+        \end{gather*}
+        или
+        \begin{gather*}
+            548 = 5 \cdot 10^2 + 4 \cdot 10^1 + 8 \cdot 10^0
+        \end{gather*}
+    \end{example}
+    \begin{definition}
+        10 в, в данном случае, называется \textbf{основанием} системы счисления. (поэтому система и называется десятичной)
+    \end{definition}
+\end{frame}
+
+\begin{frame}{Как мы считаем?}
+    Алфавит: $0, 1, 2, 3, 4, 5, 6, 7, 8, 9$
+    \begin{gather*}
+        0      \\
+        1      \\
+        \ldots \\
+        9      \\
+        10     \\
+        11     \\
+        \ldots \\
+        19 \\
+        \ldots \\
+        99 \\
+        100
+    \end{gather*}
+\end{frame}
+
+\begin{frame}{Двоичная система счисления}
+    \begin{example}
+        Двоичная система счисления состоит из цифр:
+        \begin{gather*}
+            0, 1
+        \end{gather*}
+        Идея состоит в том, что специальные электрические элементы внутри компьютеров, называемые транзисторами, могут находиться только в двух состояниях: HIGH и LOW.
+    \end{example}
+\end{frame}
+
+\begin{frame}{Двоичный счет}
+    Алфавит: $0, 1$
+    \begin{align*}
+        0  \qquad & 0    \\
+        1  \qquad & 1    \\
+        2  \qquad & 10   \\
+        3  \qquad & 11   \\
+        4  \qquad & 100  \\
+        5  \qquad & 101  \\
+        6  \qquad & 110  \\
+        7  \qquad & 111  \\
+        8  \qquad & 1000 \\
+        9  \qquad & 1001 \\
+        10 \qquad & 1010 \\
+    \end{align*}
+\end{frame}
+
+\begin{frame}{Интересная особенность}
+    Все арифметические правила \textit{сохраняются} в двоичной системе счисления.
+    \begin{example}
+        \begin{gather*}
+            10011_2 = 1 \cdot 2^4 + 0 \cdot 2^3 + 0 \cdot 2^2 + 1 \cdot 2^1 + 1 \cdot 2^0
+        \end{gather*}
+    \end{example}
+\end{frame}
+
+\begin{frame}{Сложение и умножение в ДСС}
+    \begin{columns}
+        \begin{column}{0.5\textwidth}
+            \begin{table}
+                \begin{tabular}{c | c | c}
+                    + & 0 & 1  \\
+                    \hline
+                    0 & 0 & 1  \\
+                    \hline
+                    1 & 1 & 10 \\
+                \end{tabular}
+            \end{table}
+        \end{column}
+        \begin{column}{0.5\textwidth}
+            \begin{table}
+                \begin{tabular}{c | c | c}
+                    $\times$ & 0 & 1 \\
+                    \hline
+                    0        & 0 & 0 \\
+                    \hline
+                    1        & 0 & 1 \\
+                \end{tabular}
+            \end{table}
+        \end{column}
+    \end{columns}
+    \begin{example}
+        \begin{columns}
+            \begin{column}{0.5\textwidth}
+                \begin{gather*}
+                    \begin{array}{r}
+                        -
+                        \begin{array}{r}
+                            10000011 \\
+                            10000001 \\
+                        \end{array} \\
+                        \hline
+                        \begin{array}{r}
+                            10
+                        \end{array}
+                    \end{array}
+                \end{gather*}
+            \end{column}
+            % \begin{column}{0.5\textwidth}
+            %     \begin{gather*}
+            %         \begin{array}{r}
+            %             +
+            %             \begin{array}{r}
+            %                 3556\overset{1}{2} \\
+            %                 399\\
+            %             \end{array} \\
+            %             \hline
+            %             \begin{array}{r}
+            %                 35961
+            %             \end{array}
+            %         \end{array}    
+            %     \end{gather*}
+            % \end{column}
+        \end{columns}
+    \end{example}
+\end{frame}
+
+\begin{frame}{Основная формула}
+    \begin{definition}
+        \textbf{Развернутая форма записи}
+        \begin{gather*}
+            A_q = \pm \left( a_{n-1} \cdot q^{n-1} + a_{n-2} \cdot q^{n-2} + \ldots + a_{0} \cdot q^{0} + \ldots + a_{-1} \cdot q^{-1} + \ldots + a_{-m} \cdot q^{-m} \right)
+        \end{gather*}
+        , где \\
+        $A$ - число \\
+        $q$ - основание системы счисления \\
+        $a_i$ - цифры, принадлежащие алфавиту данной системы \\
+        $n$ - количество целых разрядов числа \\
+        $m$ - количество дробных разрядов числа \\
+        $q^i$ - \glqq вес\grqq разряда\\
+    \end{definition}
+\end{frame}
+
+% \begin{frame}{Упражнение 1}
+%     Запишите в развернутой форме число $123,456$ в десятичной системе счисления
+%     \vfill
+% \end{frame}
+
+% \begin{frame}{Упражнение 2}
+%     Запишите в развернутой форме число $100011$ в двоичной системе счисления
+%     \vfill
+% \end{frame}
+
+\begin{frame}{Перевод системы счисления в десятичную}
+    Очевидно, что если записать число в развернутой форме, но считать все в привычной нам десятичной форме получится исходное число.
+    \begin{example}
+        \begin{align*}
+            10011_2 & = 1 \cdot 2^4 + 0 \cdot 2^3 + 0 \cdot 2^2 + 1 \cdot 2^1 + 1 \cdot 2^0 \\
+                    & = 1 \cdot 16 + 0 \cdot 8 + 0 \cdot 4 + 1 \cdot 2 + 1 \cdot 1          \\
+                    & = 16 + 2 + 1                                                          \\
+                    & = 19_{10}
+        \end{align*}
+    \end{example}
+\end{frame}
+
+% \begin{frame}{Перевод десятичной системы счисления в двоичную}
+%     \begin{align*}
+%         \frac{a_{n-1} \cdot 2^{n-1} + a_{n-2} \cdot 2^{n-2} + \ldots + a_1 \cdot 2^1 + a_0}{2} & = a_{n-1} \cdot 2^{n-2} + \ldots + a_1 \quad \text{остаток} \; a_0 \\
+%         \frac{a_{n-1} \cdot 2^{n-1} + a_{n-2} \cdot 2^{n-2} + \ldots + a_1}{2}                 & = a_{n-1} \cdot 2^{n-2} + \ldots + a_2 \quad \text{остаток} \; a_1 \\
+%         \frac{a_{n-1} \cdot 2^{n-1} + a_{n-2} \cdot 2^{n-2} + \ldots + a_2}{2}                 & = a_{n-1} \cdot 2^{n-2} + \ldots + a_3 \quad \text{остаток} \; a_2 \\
+%                                                                                                & \ldots
+%     \end{align*}
+%     На $n$-м шаге получаем число $\overline{a_0a_1a_2\ldots a_{n-1}}$
+% \end{frame}
+
+\begin{frame}{Перевод десятичной системы счисления в двоичную}
+    \begin{example}
+        \begin{table}
+            \begin{tabular}{| c | c | c | c | c | c | c | c | c |}
+                \hline
+                363 & 181 & 90 & 45 & 22 & 11 & 5 & 2 & 1 \\
+                \hline
+                1   & 1   & 0  & 1  & 0  & 1  & 1 & 0 & 1 \\
+                \hline
+            \end{tabular}
+        \end{table}
+        Итого, получаем число $363_{10} = 101101011_{2}$
+    \end{example}
+    \begin{example}
+        \begin{table}
+            \begin{tabular}{|c | c | c | c | c | c | c | c | c |}
+                \hline
+                314 & 157 & 78 & 39 & 19 & 9 & 4 & 2 & 1 \\
+                \hline
+                0   & 1   & 0  & 1  & 1  & 1 & 0 & 0 & 1 \\
+                \hline
+            \end{tabular}
+        \end{table}
+        Итого, получаем число $314_{10} = 100111010_{2}$
+    \end{example}
+\end{frame}
+
+\begin{frame}{Шестнадцатеричная система счисления}
+    На самом деле, можно придумать цифры после 9, но вместо этого, для оснований системы выше 10 принято использовать латинские буквы.
+    \begin{definition}
+        Шестнадцатеричная система счисления - система счсления с основанием 16, где
+        \begin{align*}
+            A & = 10 \\
+            B & = 11 \\
+            C & = 12 \\
+            D & = 13 \\
+            E & = 14 \\
+            F & = 15 \\
+        \end{align*}
+    \end{definition}
+\end{frame}
+
+\begin{frame}{Fast bin2hex и fast hex2bin}
+    В системах счисления с основанием, равным степени двойки наблюдается интересная особенность: числа можно переводить посимвольно!
+    \begin{example}
+        \begin{gather*}
+            \underbrace{1}_{1} \underbrace{0001}_{1} \underbrace{0101}_{5} \underbrace{1010}_{A} \underbrace{1001}_{9} \underbrace{0010_{2}}_{2} \\
+            100010101101010010010_2 = 115A92_{16}
+        \end{gather*}
+    \end{example}
+    \begin{example}
+        \begin{gather*}
+            \underbrace{7}_{0111} \underbrace{3}_{0011} \underbrace{B_{16}}_{1011} \\
+            73B_{16} = 11100111011_{2}
+        \end{gather*}
+    \end{example}
+\end{frame}
+
+\begin{frame}{Двоично-десятичная система счисления}
+    Двоично-десятичная система счисления (BCD) повторяет идею fast bin2hex и fast hex2bin только для пары десятичной и двоичной систем счисления.
+    \begin{example}
+        \begin{gather*}
+            \underbrace{3}_{0011}\underbrace{1}_{0001}\underbrace{1_{10}}_{0001} \\
+            311_{10} = 1100010001_{BCD}
+        \end{gather*}
+    \end{example}
+\end{frame}
+
+\begin{frame}{Симметричная троичная система счисления}
+    Алфавит: $\overline{1}, 0, 1$ \\
+    Сохраняется схема с позиционными аналогами, но цифра $\overline{1}$ теперь обозначает $-1$.
+    \begin{table}
+        \begin{tabular}{| c | c | c | c | c | c | c | c | c | c | c | c |}
+            \hline
+            Десятичная система             & $-5$             & $-4$            & $-3$            & $-2$            & $-1$           & $0$ & $1$ & $2$             & $3$  & $4$  & $5$              \\
+            Троичная несимметричная        & $-12$            & $-11$           & $-10$           & $-2$            & $-1$           & $0$ & $1$ & $2$             & $10$ & $11$ & $12$             \\
+            \textbf{Троичная симметричная} & $\overline{1}11$ & $\overline{11}$ & $\overline{1}0$ & $\overline{1}1$ & $\overline{1}$ & $0$ & $1$ & $1\overline{1}$ & $10$ & $11$ & $1\overline{11}$ \\
+            \hline
+        \end{tabular}
+    \end{table}
+    \begin{example}
+        \begin{align*}
+            1\overline{1}01\overline{1} & = 1 \cdot 3^4 + \overline{1} \cdot 3^3 + 0 \cdot 3^2 + 1 \cdot 3^1 + \overline{1} \cdot 3^0 \\
+                                        & = 81 - 27 + 3 - 1                                                                           \\
+                                        & = 56
+        \end{align*}
+    \end{example}
+\end{frame}
+
+\end{document}

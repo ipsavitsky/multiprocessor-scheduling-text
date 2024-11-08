@@ -1,0 +1,233 @@
+\documentclass[hyperref=unicode, aspectratio=169]{beamer}
+\usepackage[utf8]{inputenc}
+\usepackage[T2A]{fontenc}
+\usepackage[russian]{babel}
+\usepackage{minted}
+
+\uselanguage{russian}
+\languagepath{russian}
+
+\deftranslation[to=russian]{Example}{Повтори сам}
+\deftranslation[to=russian]{Definition}{Определение}
+
+\title{Введение в Python}
+\author[]{Савицкий Илья Павлович и Тетерин Дмитрий Юрьевич}
+\date[]{Июль 2022}
+
+\usetheme{Madrid}
+% \useoutertheme{infolines}
+% \setbeamersize{text margin left=1em,text margin right=1em}
+
+\setminted[python]{linenos=true}
+
+\begin{document}
+\maketitle
+
+\begin{frame}{Ставим Python}
+    \begin{enumerate}
+        \item Заходим в учетки под своими логинами и паролями (если не помните - спросите у нас)
+        \item Заходим в Microsoft Store, в поиске вводим python
+        \item Скачиваем то что будет первое в результате
+        \item Profit :)
+    \end{enumerate}
+\end{frame}
+
+\begin{frame}[fragile]{Первая программа на Python}
+    Для начала посмотрим пример самой простой функции - \mintinline{python}{print()}. Она не делает ничего, кроме вывода на экран того, что вы подали ей на вход.
+    \begin{example}
+        \begin{minted}{python}
+print("Hello, world!")
+        \end{minted}    
+    \end{example}
+    Функции, которые стоят последовательно выполняются одна за другой.
+    \begin{example}
+        \begin{minted}{python}
+print("Привет,")
+print("мир!")
+        \end{minted}    
+    \end{example}
+\end{frame}
+
+\begin{frame}[fragile]{Переменные}
+    Иногда в программе надо что-то хранить, например, числа. У каждой переменной должно быть имя (ставится слева от равно) и значение (ставится справа от равно)
+    \begin{example}
+        \begin{minted}{python}
+a = 5
+b = 7.6
+print(b)
+print(a)
+b = a
+print(b)
+        \end{minted}    
+    \end{example}
+    
+\end{frame}
+
+\begin{frame}[fragile]{Математические операторы}
+    Математические операции в Python \textit{просто работают}, что с целыми, что с дробными числами
+    \begin{example}
+        \begin{minted}{python}
+a = 5
+b = 7
+print(a + b)
+print(a - b)
+print(a * b)
+print(a / b)
+print(a % b)
+print(a ** b)
+        \end{minted}    
+    \end{example}
+\end{frame}
+
+\begin{frame}[fragile]{Строковый тип}
+    Строки в Python работают точно так же:
+    \begin{example}
+        \begin{minted}{python}
+a = "abc"
+b = 'rds'
+print(a + b)
+        \end{minted}    
+    \end{example}
+    
+    Таким образом, уже бывший пример
+    \begin{minted}{python}
+print("Hello world!")
+    \end{minted}
+    абсолютно идентичен следующему:
+    \begin{minted}{python}
+a = "Hello world"
+print(a)
+    \end{minted}
+\end{frame}
+
+\begin{frame}[fragile]{Ввод, но что-то нечисто}
+    За ввод в Python отвечает функция \mintinline{python}{input()}. Давайте попробуем с ее помощью ввести число и провести с ним какие-то манипуляции.
+    \begin{example}
+        \begin{minted}{python}
+a = input()
+print(a + 10)
+        \end{minted}
+    \end{example}
+    Получаем ошибку:
+    \begin{minted}{text}
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+TypeError: can only concatenate str (not "int") to str
+    \end{minted}
+    Которая, если перевести ее на русский, говорит что нельзя сложить число и строку. Все потому, что \mintinline{python}{input()} \textit{всегда} вводит с клавиатуры строку, то есть нам с клавиатуры ввелось не число, а строка \mintinline{python}{'5'}
+\end{frame}
+
+\begin{frame}[fragile]{Ввод, но все теперь чисто}
+    Чтобы превратить строку в число воспользуемся простой функцией \mintinline{python}{int()}. Тогда \mintinline{python}{a} присвоится значение именно соответствующего числа.
+    \begin{example}
+        \begin{minted}{python}
+a = int(input())
+print(a + 10)
+        \end{minted}    
+    \end{example}
+    Попробуйте ввести как число, так и что-то, что в число не приводится, например строку \mintinline{python}{"Привет"}. \\
+    Чтобы привести строку к дробному числу можно использовать \mintinline{python}{float()}
+\end{frame}
+
+\begin{frame}[fragile]{Списки и слайсы}
+    Очень часто в программировании приходится хранить \textit{набор} каких-то значение, и чтобы не хранить каждое значение в отдельной переменной, в Python существуют \textbf{списки}. Каждый элемент в таком списке пронумерован \textbf{с нуля}. Отрицательные индексы считаются с конца. \mintinline{python}{array[-1]} вернет последний элемент. Слайсы принимают два индекса - с какого по какого элемента взять в слайсе. Дополнительно можно указать третий элемент - шаг.
+    \begin{example}
+        \begin{minted}{python}
+a = [4, 3, 2, 1, "два", 2.5, "ТРИ"]
+print(a)
+print(a[1])
+print(a[-2])
+print(a[2:5])
+print(a[:2])
+print(a[3::2])
+        \end{minted}
+    \end{example}
+    
+\end{frame}
+
+\begin{frame}[fragile]{Разные условия в Python}
+    \begin{definition}
+        \textbf{Булевым} типом данных называет тип данных, который может принимать только два значения. В Python эти значения - \mintinline{python}{True} и \mintinline{python}{False}
+    \end{definition}
+    \begin{enumerate}
+        \item Сравнение на равенство (\mintinline{python}{==}) или неравенство (\mintinline{python}{!=})
+        \begin{example}
+            \begin{minted}{python}
+print(5 == 5)
+print(5 == 6)
+print(5 != 6)
+print(6 != 6)
+            \end{minted}
+        \end{example}
+        \item Больше (\mintinline{python}{>})/больше или равно (\mintinline{python}{>=}), меньше (\mintinline{python}{<})/меньше или равно (\mintinline{python}{<=})
+    \end{enumerate}
+\end{frame}
+
+\begin{frame}[fragile]{Оператор if}
+    Писать линейные программы скучно - одна из возможностей сменить привычный ход программы - оператор \mintinline{python}{if}
+    \begin{example}
+        Пример программы, проверяющей четность числа
+        \begin{minted}{python}
+a = int(input())
+if a % 2 == 0:
+    print("Четное")
+else:
+    print("Нечетное")
+        \end{minted}    
+    \end{example}
+\end{frame}
+
+\begin{frame}[fragile]{Цикл for}
+    Оператор \mintinline{python}{for} повторяет какую-то часть кода, при этом постоянно сменяя какую-то переменную. Понятнее становится из следующего кода: 
+    \begin{example}
+        \begin{minted}{python}
+a = [2, 4, 6, 8, 10, 12]
+for i in a:
+    print(i)
+    print(i**2)
+        \end{minted}
+    \end{example}
+\end{frame}
+
+\begin{frame}[fragile]{Цикл for}
+    Чтобы быстро и на месте сгенерировать список нужной длины можно воспользоваться специальной функцией \mintinline{python}{range()}. Несколько примеров 
+    \begin{example}
+        \begin{minted}{python}
+for i in range(10):
+    print(i)
+        \end{minted}
+    \end{example}
+\end{frame}
+
+\begin{frame}[fragile]{Цикл while}
+    \begin{example}
+        \begin{minted}{python}
+a = 123
+while a > 0:
+    print(a)
+    a = a // 2
+        \end{minted}
+    \end{example}
+    \begin{example}
+        \begin{minted}{python}
+while True:
+    a = int(input())
+    if a == 0:
+        break
+    ...
+        \end{minted}
+    \end{example}
+\end{frame}
+
+\begin{frame}[fragile]{Пора поделать что-то самим}
+    \begin{enumerate}
+        \item Открываем сайт ejudge.school.msu.ru
+        \item Выбираем соответствующее соревнование
+        \item Заходим под логином/паролем с фото
+        \item Меняем свои логины/пароли
+        \item Решаем задачки
+        \item Profit :)
+    \end{enumerate}
+\end{frame}
+
+\end{document}

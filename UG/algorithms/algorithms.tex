@@ -1,0 +1,189 @@
+\documentclass[hyperref=unicode, aspectratio=169]{beamer}
+\usepackage[utf8]{inputenc}
+\usepackage[T2A]{fontenc}
+\usepackage[russian]{babel}
+\usepackage{minted}
+
+\uselanguage{russian}
+\languagepath{russian}
+
+\beamertemplatenavigationsymbolsempty
+
+\deftranslation[to=russian]{Example}{Пример}
+\deftranslation[to=russian]{Definition}{Определение}
+
+\title{Разбор контеста}
+\author[]{Савицкий Илья Павлович и Тетерин Дмитрий Юрьевич}
+\date[]{Июль 2022}
+
+\usetheme{Berlin}
+
+\begin{document}
+
+\maketitle
+\section{Задача А}
+\begin{frame}[fragile]{Правильное решение}
+    \begin{minted}{python}
+a = int(input())
+b = int(input())
+
+print(a + b)
+    \end{minted}    
+\end{frame}
+
+
+\section{Задача B}
+
+\begin{frame}[fragile]{Распространенная ошибка 1}
+    \begin{minted}{python}
+a = int(input())
+
+if a % 2 = 0:
+   print("YES")
+else:
+   print("NO")
+    \end{minted}
+\end{frame}
+
+\begin{frame}[fragile]{Правильное решение}
+    \begin{minted}{python}
+a = int(input())
+
+if a % 2 == 0:
+   print("YES")
+else:
+   print("NO")
+    \end{minted}
+\end{frame}
+
+
+\section{Задача C}
+
+\begin{frame}[fragile]{Правильное решение 1}
+    \begin{minted}{python}
+a=int(input())
+
+if a%3==0:
+    if a%6==0:   
+        print("NO")
+    else:
+        print("YES")
+else:
+    print("NO")
+    \end{minted}
+\end{frame}
+
+\begin{frame}[fragile]{Сложные условия}
+    Сложные условия позволяют избежать вложенных \mintinline{python}{if}-ов и сильно упрощают код.
+    \begin{minted}{python}
+if <условие1> and <условие2>:
+    ...
+if <условие1> or <условие2>:
+    ...
+if not <условие1>:
+    ...
+    \end{minted}
+\end{frame}
+
+\begin{frame}[fragile]{Правильное решение 2}
+    \begin{minted}{python}
+a = int(input())
+
+if a % 3 == 0 and a % 6 != 0:
+   print("YES")
+else:
+   print("NO")
+    \end{minted}
+\end{frame}
+
+
+\section{Задача D}
+
+\begin{frame}[fragile]{Правильное решение 1}
+    \begin{minted}{python}
+a= int(input())
+if a>0:
+    while a != 0:
+        print(a%10, end="")
+        a= a//10
+elif a<0:
+    a=-a
+    print('-', end="")
+    while a != 0:
+        print(a%10, end="")
+        a= a//10
+elif a==0:
+    print(0)
+    \end{minted}
+\end{frame}
+
+\begin{frame}[fragile]{Правильное решение 2}
+    \begin{minted}{python}
+a = int(input())
+if a > 0:
+    a = str(a)
+    b = a[::-1]
+    print(b)
+else:
+    b = abs(a)
+    b = str(b)
+    c = b[::-1]
+    c = int(c)
+    c = c - c - c
+    print(c)
+    \end{minted}
+\end{frame}
+
+\section{Задача E}
+
+\begin{frame}[fragile]{Правильное решение 1}
+    \begin{minted}{python}
+a = int(input())
+m = a
+while a != 0:
+    if a > m:
+        m = a
+    a = int(input())
+print(m)
+    \end{minted}
+\end{frame}
+
+\section{Задача F}
+
+\begin{frame}[fragile]{Правильное решение 1}
+    \begin{minted}{python}
+a = int(input())
+b = int(input())
+if b!=0:
+    m = max(a, b)
+    m2 = min(a, b)
+else:
+    m = a
+    m2 = a
+while a != 0 and b!= 0:
+    if a > m:
+        m2 = m
+        m = a
+    a = int(input())
+print(m)
+print(m2)
+    \end{minted}
+\end{frame}
+
+\begin{frame}[fragile]{Правильное решение 1}
+    \begin{minted}{python}
+n = int(input())
+temp = n
+rev = 0
+while(n > 0):
+    dig = n % 10
+    rev = rev * 10 + dig
+    n = n // 10
+if(temp == rev):
+    print("YES")
+else:
+    print("NO")
+    \end{minted}
+\end{frame}
+
+\end{document}
