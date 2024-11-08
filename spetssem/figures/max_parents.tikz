@@ -1,0 +1,15 @@
+\begin{tikzpicture}
+	\begin{pgfonlayer}{nodelayer}
+		\node [style={real_node}, draw=red, fill=white, label=Выбранная вершина] (0) at (2, 5) {$\color{red} x_1$};
+		\node [style={real_node}] (1) at (0, 3) {$x_3$};
+		\node [style={real_node}] (2) at (4, 3) {$x_4$};
+		\node [style={real_node}, draw=red, fill=white] (3) at (-4, 3) {$\color{red}x_2$};
+		\node [style={real_node}] (4) at (-2, 1) {$x_5$};
+	\end{pgfonlayer}
+	\begin{pgfonlayer}{edgelayer}
+		\draw [style=arrow] (0) to (1);
+		\draw [style=arrow] (0) to (2);
+		\draw [style=arrow] (1) to (4);
+		\draw [style=arrow] (3) to (4);
+	\end{pgfonlayer}
+\end{tikzpicture}

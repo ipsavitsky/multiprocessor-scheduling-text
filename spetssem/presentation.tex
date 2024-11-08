@@ -1,0 +1,69 @@
+\documentclass[hyperref=unicode, aspectratio=169]{beamer}
+\usepackage[utf8]{inputenc}
+\usepackage[T2A]{fontenc}
+\usepackage[russian]{babel}
+\usepackage{csquotes}
+\usepackage{tikzit}
+\usepackage[justification=centering, margin=1cm]{caption}
+\usepackage{mathabx}
+\usepackage{bookmark}
+\usepackage{makecell}
+\usepackage{listings}
+\usepackage{ulem}
+
+
+\title[]{Жадные алгоритмы для пострения многопроцессорных списочных расписаний}
+\usetheme{Madrid}
+\author[]{Савицкий Илья\\Научный руководитель: к.т.н. доцент Костенко Валерий Алексеевич}
+% \medskip
+% \texttt{Научный руководитель: к.т.н. доцент Костенко Валерий Алексеевич}
+\date{11 октября 2022 г.}
+\logo{\includegraphics[width=1.5cm]{imgs/asvk-logo.png}}
+
+
+\definecolor{ASVKaccent}{rgb}{0.20392,0.02745,0.34509}
+\usecolortheme[named=ASVKaccent]{structure}
+
+\input{block-schemas.tikzstyles}
+
+\begin{document}
+\begin{frame}
+    \titlepage
+\end{frame}
+
+% \section{Цель и задачи курсовой работы}
+% \input{slides/01goals.tex}
+
+\section{Описание прикладной задачи}
+\input{slides/02task_desc.tex}
+
+% \section{Выводы по обзору}
+% \input{slides/03overview.tex}
+
+\section{Описание предложенного алгоритма}
+\input{slides/04algorithm.tex}
+
+% \section{Программная реализация}
+% \input{slides/05code.tex}
+
+% \section{Результаты исследования}
+% \input{slides/06experiments.tex}
+
+% \section{Полученные рещультаты}
+% \input{slides/07results.tex}
+
+\section{Изменения в алгоритмах}
+\input{slides/08changes.tex}
+
+\section{Экспериментальное исследование}
+\input{slides/09exp_method.tex}
+
+\begin{frame}
+    \frametitle{Дальнейшие исследования}
+    \begin{enumerate}
+        \item Оптимизация алгоритма для работы с большими объемами данных. (DAG\_C - сотни тысяч вершин, DAG\_D - миллионы вершин)
+        \item Подбор параметров и оптимизация алгоритма разбиения графа 
+    \end{enumerate}
+\end{frame}
+
+\end{document}
